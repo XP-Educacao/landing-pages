@@ -1,20 +1,23 @@
 import { CalendarPlus, Clock, User, Video } from "lucide-react";
-import type { Session } from "@/data/event";
+import type { Session, SessionStatus } from "@/data/event";
+import { getStatusBadge } from "@/data/mappers";
+import { formatSessionDate, formatSessionTime } from "@/data/helpers";
 import { ActionLink, Badge } from "./ui";
 import { cn } from "@/lib/utils";
 
-function StatusBadge({ status }: { status: Session["status"] }) {
-  if (status === "confirmado") return <Badge tone="green">Confirmado</Badge>;
-  if (status === "concluido") return <Badge tone="gray">Concluído</Badge>;
-  return <Badge tone="yellow">Em breve</Badge>;
+function StatusBadge({ status }: { status: SessionStatus }) {
+  const { tone, label } = getStatusBadge(status);
+  return <Badge tone={tone}>{label}</Badge>;
 }
 
 export function SessionCard({
   session,
+  status,
   featured = false,
   compact = false,
 }: {
   session: Session;
+  status: SessionStatus;
   featured?: boolean;
   compact?: boolean;
 }) {
@@ -28,21 +31,23 @@ export function SessionCard({
     >
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone="green">{session.category}</Badge>
-        {compact ? <Badge tone="gray">{session.date}</Badge> : <StatusBadge status={session.status} />}
+        {compact ? (
+          <Badge tone="gray">{formatSessionDate(session.dateTime)}</Badge>
+        ) : (
+          <StatusBadge status={status} />
+        )}
       </div>
 
       {!compact && (
         <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold text-foreground">
           <span className="inline-flex items-center gap-1.5">
             <CalendarPlus className="size-4 shrink-0 text-primary" aria-hidden="true" />
-            {session.date}
+            {formatSessionDate(session.dateTime)}
           </span>
-          {session.time ? (
-            <span className="inline-flex items-center gap-1.5 font-normal text-muted-foreground">
-              <Clock className="size-4 shrink-0 text-primary" aria-hidden="true" />
-              {session.time}
-            </span>
-          ) : null}
+          <span className="inline-flex items-center gap-1.5 font-normal text-muted-foreground">
+            <Clock className="size-4 shrink-0 text-primary" aria-hidden="true" />
+            {formatSessionTime(session.dateTime, session.durationMinutes)}
+          </span>
         </p>
       )}
 

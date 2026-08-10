@@ -11,16 +11,15 @@ export type SessionStatus = "confirmado" | "em-breve" | "concluido";
 export type Session = {
   id: string;
   category: string;
-  status: SessionStatus;
-  date: string;
-  time?: string;
+  /** Data e hora de início em ISO 8601 (ex: "2026-08-31T19:00:00-03:00") */
+  dateTime: string;
+  /** Duração da sessão em minutos */
+  durationMinutes: number;
   title: string;
   description: string;
   instructor?: string;
   /** Link do Zoom. Deixe vazio ("") para manter o botão desabilitado. */
   zoomUrl: string;
-  /** true = botão "Entrar na Aula" ativo (libera ~15min antes da sessão). */
-  live: boolean;
   ctaLabel: string;
 };
 
@@ -44,15 +43,13 @@ export const notices = [
 export const opening: Session = {
   id: "abertura",
   category: "Evento",
-  status: "confirmado",
-  date: "31/08 · Segunda",
-  time: "19h às 20h30",
+  dateTime: "2026-08-31T19:00:00-03:00",
+  durationMinutes: 90,
   title: "O que realmente é fluência em IA para os profissionais de tecnologia",
   description:
     "Uma abertura direta ao ponto sobre o que muda no dia a dia de quem constrói software quando a IA deixa de ser hype e vira ferramenta de trabalho.",
   instructor: "Prof. André Souza",
   zoomUrl: "https://zoom.us/",
-  live: true,
   ctaLabel: "Entrar na Aula (Zoom)",
 };
 
@@ -72,15 +69,13 @@ export const weeks: WeekBlock[] = [
       {
         id: "s1-1",
         category: "Workshop",
-        status: "confirmado",
-        date: "01/09 · Terça",
-        time: "19h às 21h",
+        dateTime: "2026-09-01T19:00:00-03:00",
+        durationMinutes: 120,
         title: "Construindo um agente de IA do zero",
         description:
           "Mão na massa: da definição de ferramentas ao loop de raciocínio, construindo um agente funcional em tempo real.",
         instructor: "Prof. Vinicius Marinho",
         zoomUrl: "https://zoom.us/",
-        live: true,
         ctaLabel: "Entrar na Aula (Zoom)",
       },
     ],
@@ -93,29 +88,25 @@ export const weeks: WeekBlock[] = [
       {
         id: "s2-1",
         category: "Palestra",
-        status: "em-breve",
-        date: "08/09 · Terça",
-        time: "19h às 20h30",
+        dateTime: "2026-09-08T19:00:00-03:00",
+        durationMinutes: 90,
         title: "Como empresas estão redesenhando produtos com IA",
         description:
           "Casos reais de reposicionamento de produto e o impacto na rotina dos times de engenharia.",
         instructor: "Convidado Especial",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
       {
         id: "s2-2",
         category: "Palestra",
-        status: "em-breve",
-        date: "09/09 · Quarta",
-        time: "19h às 20h30",
+        dateTime: "2026-09-09T19:00:00-03:00",
+        durationMinutes: 90,
         title: "As tecnologias que todo profissional deveria acompanhar em 2026",
         description:
           "Um panorama sobre o que realmente vale a atenção do seu tempo de estudo no próximo ciclo.",
         instructor: "Convidado Especial",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
     ],
@@ -128,45 +119,41 @@ export const weeks: WeekBlock[] = [
       {
         id: "s3-1",
         category: "Trilha Exclusiva",
-        status: "em-breve",
-        date: "15/09 a 19/09",
+        dateTime: "2026-09-15T19:00:00-03:00",
+        durationMinutes: 120,
         title: "Arquitetura de Software",
         description: "Padrões, trade-offs e decisões que sustentam sistemas em escala.",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
       {
         id: "s3-2",
         category: "Trilha Exclusiva",
-        status: "em-breve",
-        date: "15/09 a 19/09",
+        dateTime: "2026-09-15T19:00:00-03:00",
+        durationMinutes: 120,
         title: "Engenharia de Dados",
         description: "Pipelines confiáveis, qualidade de dados e arquitetura moderna.",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
       {
         id: "s3-3",
         category: "Trilha Exclusiva",
-        status: "em-breve",
-        date: "15/09 a 19/09",
+        dateTime: "2026-09-15T19:00:00-03:00",
+        durationMinutes: 120,
         title: "Segurança da Informação",
         description: "Ameaças atuais, defesa em profundidade e cultura de segurança.",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
       {
         id: "s3-4",
         category: "Trilha Exclusiva",
-        status: "em-breve",
-        date: "15/09 a 19/09",
+        dateTime: "2026-09-15T19:00:00-03:00",
+        durationMinutes: 120,
         title: "Data Science & Machine Learning",
         description: "Do experimento ao modelo em produção, com métricas que importam.",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
     ],
@@ -179,29 +166,25 @@ export const weeks: WeekBlock[] = [
       {
         id: "s4-1",
         category: "Mesa-redonda",
-        status: "em-breve",
-        date: "27/09 · Domingo",
-        time: "19h às 20h30",
+        dateTime: "2026-09-27T19:00:00-03:00",
+        durationMinutes: 90,
         title: "O futuro da carreira tech",
         description:
           "Profissionais de diferentes senioridades discutem caminhos, escolhas e o que esperar dos próximos anos.",
         instructor: "Convidado Especial",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
       {
         id: "s4-2",
         category: "AMA",
-        status: "em-breve",
-        date: "29/09 · Terça",
-        time: "19h às 20h30",
+        dateTime: "2026-09-29T19:00:00-03:00",
+        durationMinutes: 90,
         title: "Pergunte qualquer coisa",
         description:
           "Encerramento aberto: traga suas dúvidas sobre estudo, carreira, IA e mercado.",
         instructor: "Convidado Especial",
         zoomUrl: "",
-        live: false,
         ctaLabel: "Entrar na Aula",
       },
     ],
@@ -213,11 +196,10 @@ export const exampleSession = {
   description:
     "Sessão concluída com materiais completos liberados: slides, código-fonte e espaço de discussão com a turma.",
   materials: [
-    { label: "Slides da Aula", url: "#" },
-    { label: "Repositório GitHub", url: "#" },
-    { label: "Discussão na Comunidade", url: "#" },
+    { label: "Slides da Aula", icon: "slides" as const },
+    { label: "Repositório GitHub", icon: "repo" as const },
+    { label: "Discussão na Comunidade", icon: "extra" as const },
   ],
-  replayUrl: "#",
 };
 
 export const communityBenefits = [

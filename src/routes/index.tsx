@@ -1,11 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  BookOpen,
   CalendarDays,
   CalendarPlus,
   Check,
-  FileText,
-  Github,
   Instagram,
   Linkedin,
   Lock,
@@ -27,6 +24,9 @@ import {
   opening,
   weeks,
 } from "@/data/event";
+import { links } from "@/data/links";
+import { libraryIcons, getStatusBadge } from "@/data/mappers";
+import { getSessionStatus, isSessionLive } from "@/data/helpers";
 import { ActionLink, Badge, Section, SectionTitle } from "@/components/event/ui";
 import { SessionCard } from "@/components/event/SessionCard";
 import { Faq } from "@/components/event/Faq";
@@ -53,13 +53,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const libraryIcons = {
-  slides: FileText,
-  replay: PlayCircle,
-  repo: Github,
-  extra: BookOpen,
-} as const;
-
 function Index() {
   return (
     <main className="min-h-screen bg-background">
@@ -83,11 +76,11 @@ function Index() {
             </Badge>
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ActionLink href={hero.communityUrl} variant="solid">
+            <ActionLink href={links.community} variant="solid">
               <Users className="size-4" aria-hidden="true" />
               Entrar na Comunidade Tech
             </ActionLink>
-            <ActionLink href={hero.calendarUrl} variant="outline">
+            <ActionLink href={links.calendar} variant="outline">
               <CalendarPlus className="size-4" aria-hidden="true" />
               Adicionar ao Calendário
             </ActionLink>
@@ -116,13 +109,17 @@ function Index() {
           title="Sua Jornada de Aprendizado"
           subtitle="Cinco semanas de conteúdo prático, do fundamento à aplicação em produto e carreira."
         />
-        <SessionCard session={opening} featured />
+        <SessionCard
+          session={opening}
+          status={getSessionStatus(opening.dateTime, opening.durationMinutes)}
+          featured
+        />
 
         <div className="mt-12 space-y-12">
           {weeks.map((week) => (
             <div key={week.label}>
               <h3 className="mb-5 text-sm font-bold uppercase tracking-wide">
-                <span className="text-primary">{week.label}</span>
+                <span className="text-label-accent">{week.label}</span>
                 <span className="text-text-tertiary"> | {week.theme}</span>
               </h3>
               <div
@@ -136,6 +133,7 @@ function Index() {
                   <SessionCard
                     key={session.id}
                     session={session}
+                    status={getSessionStatus(session.dateTime, session.durationMinutes)}
                     compact={week.layout === "grid"}
                   />
                 ))}
@@ -165,20 +163,23 @@ function Index() {
             {exampleSession.description}
           </p>
           <ul className="mt-5 grid gap-2">
-            {exampleSession.materials.map((m) => (
-              <li key={m.label}>
-                <a
-                  href={m.url}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-accent-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                >
-                  <FileText className="size-4" aria-hidden="true" />
-                  {m.label}
-                </a>
-              </li>
-            ))}
+            {exampleSession.materials.map((m) => {
+              const Icon = libraryIcons[m.icon];
+              return (
+                <li key={m.label}>
+                  <a
+                    href={links.materials[m.icon] || "#"}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-accent-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                    {m.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
           <div className="mt-6">
-            <ActionLink href={exampleSession.replayUrl} variant="solid">
+            <ActionLink href={links.materials.replay} variant="solid">
               <PlayCircle className="size-4" aria-hidden="true" />
               Assistir Replay
             </ActionLink>
@@ -211,7 +212,7 @@ function Index() {
             <h3 className="mt-4 text-xl font-bold text-foreground">{community.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{community.text}</p>
             <div className="mt-6">
-              <ActionLink href={community.url} variant="solid" className="w-full sm:w-auto">
+              <ActionLink href={links.community} variant="solid" className="w-full sm:w-auto">
                 <Users className="size-4" aria-hidden="true" />
                 {community.buttonLabel}
               </ActionLink>
@@ -229,6 +230,7 @@ function Index() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {library.map((item) => {
             const Icon = libraryIcons[item.icon];
+            const url = links.materials[item.icon] || "#";
             return (
               <article
                 key={item.title}
@@ -253,7 +255,7 @@ function Index() {
                 </p>
                 <div className="mt-5">
                   {item.released ? (
-                    <ActionLink href={item.url} variant="solid" className="w-full">
+                    <ActionLink href={url} variant="solid" className="w-full">
                       Acessar Materiais
                     </ActionLink>
                   ) : (
@@ -280,21 +282,33 @@ function Index() {
         <div className="mx-auto grid w-full max-w-5xl gap-6 sm:flex sm:items-center sm:justify-between">
           <p className="text-lg font-bold text-foreground">{footer.brand}</p>
           <ul className="flex gap-4">
-            {footer.social.map((s) => {
-              const Icon =
-                s.label === "Instagram" ? Instagram : s.label === "YouTube" ? Youtube : Linkedin;
-              return (
-                <li key={s.label}>
-                  <a
-                    href={s.url}
-                    aria-label={s.label}
-                    className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  >
-                    <Icon className="size-4" aria-hidden="true" />
-                  </a>
-                </li>
-              );
-            })}
+            <li>
+              <a
+                href={links.social.instagram}
+                aria-label="Instagram"
+                className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                <Instagram className="size-4" aria-hidden="true" />
+              </a>
+            </li>
+            <li>
+              <a
+                href={links.social.youtube}
+                aria-label="YouTube"
+                className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                <Youtube className="size-4" aria-hidden="true" />
+              </a>
+            </li>
+            <li>
+              <a
+                href={links.social.linkedin}
+                aria-label="LinkedIn"
+                className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                <Linkedin className="size-4" aria-hidden="true" />
+              </a>
+            </li>
           </ul>
         </div>
         <div className="mx-auto mt-6 w-full max-w-5xl border-t border-border pt-6 text-sm text-muted-foreground">
