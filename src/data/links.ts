@@ -1,5 +1,5 @@
 export const links = {
-  community: "https://discord.gg/",
+  community: "https://discord.gg/ZfM3sFWrw",
   calendar: "#",
   materials: {
     slides: "#",
