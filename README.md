@@ -268,9 +268,34 @@ Em **Settings → Pages**: Source = `Deploy from a branch`, Branch = `main`, Fol
 
 ### Detalhes que fazem isso funcionar
 
-- `base: "./"` no `vite.config.ts` — gera caminhos relativos, então funciona tanto em
-  `usuario.github.io/landing-pages/` quanto localmente. Com o padrão (`/`), os assets dariam 404.
-- `public/.nojekyll` — impede o Jekyll do GitHub de ignorar arquivos e pastas que começam com `_`.
+O site não é servido na raiz do domínio, e sim em `https://xp-educacao.github.io/landing-pages/`.
+Esse subcaminho precisa ser respeitado em **dois lugares** — errar um deles derruba a página:
+
+- **`BASE` em `vite.config.ts`** (`/landing-pages/`) — prefixa os assets. Sem isso o navegador
+  busca `/assets/…` na raiz do domínio e recebe 404.
+- **`basepath` em `src/router.tsx`** — lê `import.meta.env.BASE_URL` (o mesmo `BASE`). Sem isso o
+  TanStack Router tenta casar o caminho `/landing-pages/` com as rotas, não encontra nenhuma e
+  renderiza a tela de 404 da própria app — com os assets carregando normalmente, o que faz parecer
+  problema de conteúdo e não de rota.
+
+> ⚠️ **Se o repositório for renomeado, atualize `BASE`.** É o único lugar a mudar; o router
+> acompanha automaticamente.
+
+Também no build:
+
+- **`docs/404.html`** — cópia do `index.html`, gerada pelo plugin `spaFallback`. O GitHub Pages
+  devolve esse arquivo quando a URL não casa com nada, então um refresh em qualquer subcaminho
+  continua carregando a SPA em vez do 404 do GitHub.
+- **`public/.nojekyll`** — impede o Jekyll do GitHub de ignorar arquivos e pastas que começam com `_`.
+
+### Testando o subcaminho localmente
+
+`npm run dev` e `npm run preview` respeitam o `BASE`, então as URLs locais reproduzem produção:
+
+```
+http://localhost:5173/landing-pages/    (dev — acessar a raiz redireciona pra cá)
+http://localhost:4173/landing-pages/    (preview — o build real)
+```
 
 ---
 
