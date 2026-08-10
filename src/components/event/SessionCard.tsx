@@ -21,6 +21,10 @@ export function SessionCard({
   featured?: boolean;
   compact?: boolean;
 }) {
+  // Só libera o Zoom durante a janela ativa (15min antes até o fim da sessão).
+  const live = status === "confirmado" && session.zoomUrl !== "";
+  const dateText = session.dateLabel ?? formatSessionDate(session.dateTime);
+
   return (
     <article
       className={cn(
@@ -31,18 +35,14 @@ export function SessionCard({
     >
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone="green">{session.category}</Badge>
-        {compact ? (
-          <Badge tone="gray">{formatSessionDate(session.dateTime)}</Badge>
-        ) : (
-          <StatusBadge status={status} />
-        )}
+        {compact ? <Badge tone="gray">{dateText}</Badge> : <StatusBadge status={status} />}
       </div>
 
       {!compact && (
         <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold text-foreground">
           <span className="inline-flex items-center gap-1.5">
             <CalendarPlus className="size-4 shrink-0 text-primary" aria-hidden="true" />
-            {formatSessionDate(session.dateTime)}
+            {dateText}
           </span>
           <span className="inline-flex items-center gap-1.5 font-normal text-muted-foreground">
             <Clock className="size-4 shrink-0 text-primary" aria-hidden="true" />
@@ -78,8 +78,8 @@ export function SessionCard({
         ) : null}
         <ActionLink
           href={session.zoomUrl || "#"}
-          variant={session.live ? "solid" : "disabled"}
-          disabled={!session.live}
+          variant={live ? "solid" : "disabled"}
+          disabled={!live}
         >
           <Video className="size-4" aria-hidden="true" />
           {session.ctaLabel}

@@ -26,30 +26,13 @@ import {
 } from "@/data/event";
 import { links } from "@/data/links";
 import { libraryIcons, getStatusBadge } from "@/data/mappers";
-import { getSessionStatus, isSessionLive } from "@/data/helpers";
+import { getSessionStatus } from "@/data/helpers";
 import { ActionLink, Badge, Section, SectionTitle } from "@/components/event/ui";
 import { SessionCard } from "@/components/event/SessionCard";
 import { Faq } from "@/components/event/Faq";
 
+// Meta tags ficam em index.html — o build estático não executa head() no servidor.
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Mês da Tecnologia | XP Pós Tech" },
-      {
-        name: "description",
-        content:
-          "IA, tendências e carreira para profissionais de tecnologia. Imersões ao vivo via Zoom de 31/08 a 29/09.",
-      },
-      { property: "og:title", content: "Mês da Tecnologia | XP Pós Tech" },
-      {
-        property: "og:description",
-        content:
-          "Um ciclo exclusivo de imersões práticas com especialistas do mercado, de 31 de agosto a 29 de setembro.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
   component: Index,
 });
 
@@ -123,11 +106,7 @@ function Index() {
                 <span className="text-text-tertiary"> | {week.theme}</span>
               </h3>
               <div
-                className={
-                  week.layout === "single"
-                    ? "grid gap-5"
-                    : "grid gap-5 sm:grid-cols-2"
-                }
+                className={week.layout === "single" ? "grid gap-5" : "grid gap-5 sm:grid-cols-2"}
               >
                 {week.sessions.map((session) => (
                   <SessionCard

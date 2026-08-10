@@ -45,7 +45,9 @@ export function SectionTitle({ title, subtitle }: { title: string; subtitle?: st
   return (
     <header className="mb-8 max-w-2xl">
       <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{title}</h2>
-      {subtitle ? <p className="mt-2 text-sm text-muted-foreground sm:text-base">{subtitle}</p> : null}
+      {subtitle ? (
+        <p className="mt-2 text-sm text-muted-foreground sm:text-base">{subtitle}</p>
+      ) : null}
     </header>
   );
 }

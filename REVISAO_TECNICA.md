@@ -2,7 +2,13 @@
 
 **Data:** 2026-08-10  
 **Projeto:** Mês da Tecnologia (XP Pós Tech)  
-**Stack:** React 19 + TanStack Start + Vite + Tailwind CSS 4
+**Stack na época:** React 19 + TanStack Start (SSR) + Vite + Tailwind CSS 4
+
+> 🗄️ **Documento histórico — não descreve o estado atual.**
+> Depois desta revisão o projeto foi convertido de TanStack Start (SSR) para **SPA estática**
+> servida pelo GitHub Pages, e o helper `isSessionLive()` proposto aqui foi removido (a lógica
+> passou para o `SessionCard`, que também checa `zoomUrl`).
+> Para a arquitetura vigente, use o [README.md](README.md).
 
 ---
 

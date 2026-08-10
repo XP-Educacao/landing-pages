@@ -8,34 +8,53 @@ especializadas, comunidade no Discord, biblioteca de materiais e FAQ.
 
 ## Destino de publicação: GitHub Pages com link externo no LMS
 
-Este README documenta o projeto **como ele está hoje**: uma aplicação React com etapa de build.
+A página é uma **SPA estática** (React renderizado no navegador, sem servidor). O build gera
+HTML/CSS/JS puro na pasta `docs/`, que é exatamente o que o GitHub Pages serve. É referenciada como
+**link externo** dentro do LMS (Brightspace/D2L).
 
-A página será hospedada em **GitHub Pages** e referenciada como **link externo** dentro do LMS
-(Brightspace/D2L). Isso significa que a stack atual (React 19 + TanStack Start + Vite + Nitro)
-está **corretamente dimensionada** para o caso de uso — não é necessário compilar para HTML único,
-nem reescrever em vanilla.
+Não há SSR, Node.js nem função serverless em produção — apenas arquivos estáticos.
 
 ---
 
 ## Para quem só precisa atualizar o conteúdo
 
-Se você é da operação acadêmica e só quer trocar uma data, um link de Zoom ou o nome de um
-instrutor, é aqui:
+Se você é da operação acadêmica e só quer trocar uma data, um link ou o nome de um instrutor, são
+**dois arquivos** — e só eles:
 
-> 📍 **Onde fica o conteúdo:** `<!-- PREENCHER: caminho do arquivo de dados, ex. src/data/evento.ts -->`
+| Arquivo | O que fica lá |
+|---|---|
+| 📍 `src/data/links.ts` | **Todas as URLs**: comunidade (Discord), calendário, materiais, replay, redes sociais |
+| 📍 `src/data/event.ts` | **Todos os textos e datas**: sessões, trilhas, avisos, biblioteca, FAQ, rodapé |
 
-Nesse arquivo estão as sessões do cronograma, as trilhas, os avisos, os itens da biblioteca e as
-perguntas do FAQ. Você edita o texto, a data e o link — sem mexer em HTML, CSS ou layout.
+Você edita texto, data e link — sem tocar em HTML, CSS ou layout.
+
+### Trocar um link
+
+Abra `src/data/links.ts`. É um objeto único, tudo em um lugar:
+
+```ts
+export const links = {
+  community: "https://discord.gg/ZfM3sFWrw",  // botão "Entrar na Comunidade"
+  calendar: "#",                              // botão "Adicionar ao Calendário"
+  materials: { slides: "#", replay: "#", repo: "#", extra: "#" },
+  social: { instagram: "#", youtube: "#", linkedin: "#" },
+} as const;
+```
+
+Links do Zoom são a exceção: ficam no campo `zoomUrl` de cada sessão em `event.ts`, porque são
+específicos por aula.
 
 **Regras importantes ao editar:**
 
 - **Datas em formato ISO** (`2026-09-08T19:00:00-03:00`). O status do card — "Em breve",
-  "Confirmado", "Encerrado" — e a liberação do botão "Entrar na Aula" são calculados
+  "Confirmado", "Concluído" — e a liberação do botão "Entrar na Aula" são calculados
   automaticamente a partir dessa data. Não existe campo de status para digitar à mão.
-- **Link ainda não definido:** deixe `null`, não deixe string vazia nem `"#"`. O `null` vira botão
-  "Em breve" desabilitado; uma string vazia vira link quebrado na cara do aluno.
-- Depois de editar, é necessário publicar de novo (ver *Publicação* abaixo). A alteração não vai ao
-  ar sozinha.
+- **Zoom ainda não definido:** deixe `zoomUrl: ""` (string vazia). Isso mantém o botão desabilitado
+  mesmo dentro da janela de liberação — evita link quebrado na cara do aluno.
+- **Sessão que cobre vários dias:** use `dateLabel` para sobrescrever a data exibida
+  (ex. `dateLabel: "15/09 a 19/09"` nas trilhas). Sem isso, o card mostra apenas o dia de início.
+- Depois de editar, é necessário rodar o build e publicar (ver *Publicação* abaixo). A alteração
+  **não** vai ao ar sozinha.
 
 ---
 
@@ -43,48 +62,61 @@ perguntas do FAQ. Você edita o texto, a data e o link — sem mexer em HTML, CS
 
 | Camada | Tecnologia |
 |---|---|
-| Framework | React 19 + TanStack Start |
+| Framework | React 19 (SPA — renderização no cliente) |
 | Roteamento | TanStack Router |
-| Build | Vite 8 (+ Nitro no build de produção) |
+| Build | Vite 8 → saída estática em `docs/` |
 | Linguagem | TypeScript (modo `strict`) |
 | Estilo | Tailwind CSS 4 |
 | Componentes | shadcn/ui (estilo *new-york*) sobre Radix UI |
 | Ícones | lucide-react |
-| Gerenciador de pacotes | **Bun** |
-| Origem | Projeto conectado ao [Lovable](https://lovable.dev) |
+| Hospedagem | GitHub Pages (arquivos estáticos) |
 
-> **Sobre o Lovable:** commits enviados à branch conectada sincronizam de volta para o editor.
-> Não reescreva histórico já publicado (`force push`, `rebase`, `amend` ou `squash` de commits já
-> enviados) — isso corrompe o histórico do lado do Lovable. Ver `AGENTS.md`.
+---
+
+## Estrutura de arquivos
+
+```
+index.html              Entry HTML — meta tags, title, OG (SEO fica aqui)
+src/
+  main.tsx              Monta o React no #root
+  router.tsx            Instancia o TanStack Router
+  routes/
+    __root.tsx          Layout raiz + telas de 404 e erro
+    index.tsx           A landing page (as 8 seções, na ordem)
+  data/
+    links.ts            ★ TODAS as URLs (fonte única)
+    event.ts            ★ Textos, datas, sessões, FAQ
+    helpers.ts          Cálculo de status e formatação de data/hora
+    mappers.ts          status → badge, ícone → componente
+  components/
+    event/              Componentes da página (SessionCard, Faq, ui)
+    ui/                 shadcn/ui (biblioteca base)
+  styles.css            Design system (variáveis de cor em oklch)
+docs/                   ← Build de produção. Gerado, mas commitado (GitHub Pages serve daqui)
+```
+
+Os arquivos marcados com ★ são os únicos que a operação acadêmica precisa editar.
 
 ---
 
 ## Rodando localmente
 
-**Pré-requisito:** [Bun](https://bun.sh) instalado.
-
 ```bash
-bun install
-bun dev          # servidor de desenvolvimento
+npm install
+npm run dev
 ```
 
 | Script | O que faz |
 |---|---|
-| `bun dev` | Servidor de desenvolvimento com hot reload |
-| `bun run build` | Build de produção |
-| `bun run build:dev` | Build com variáveis de desenvolvimento |
-| `bun run preview` | Serve localmente o resultado do build |
-| `bun run lint` | ESLint |
-| `bun run format` | Prettier em todo o projeto |
+| `npm run dev` | Servidor de desenvolvimento com hot reload (porta 5173) |
+| `npm run build` | Build de produção → gera `docs/` |
+| `npm run preview` | Serve localmente o conteúdo de `docs/` (simula o GitHub Pages) |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier em todo o projeto |
 
-> ⚠️ **Use apenas Bun.** O repositório contém `bun.lock` *e* `package-lock.json` — resquício de dois
-> gerenciadores diferentes. Isso faz a mesma dependência resolver em versões distintas dependendo
-> de quem instalou. O `package-lock.json` deve ser removido; o `bunfig.toml` confirma que a
-> intenção do projeto é Bun.
-
-O `bunfig.toml` também aplica uma proteção de cadeia de suprimentos: pacotes publicados há menos de
-24 horas são ignorados na instalação. Para liberar exceção, é preciso adicionar o pacote em
-`minimumReleaseAgeExcludes` — **confirme com o time antes de fazer isso.**
+> ⚠️ **Dois lockfiles no repositório.** Existem `bun.lock` *e* `package-lock.json`. A mesma
+> dependência pode resolver em versões diferentes dependendo de quem instalou. Escolher um
+> gerenciador e apagar o lockfile do outro é uma pendência aberta — ver *Pendências conhecidas*.
 
 ---
 
@@ -114,22 +146,31 @@ comportamento acordado com a área acadêmica.
 
 ### Liberação do botão de aula
 
-O botão "Entrar na Aula" fica ativo a partir de **~15 minutos antes** do horário de início da
-sessão. Essa regra está anunciada ao aluno no próprio FAQ da página ("Como acessar o evento ao
-vivo?"), então mudar a janela sem atualizar o texto do FAQ deixa a página mentindo.
+O botão "Entrar na Aula" fica ativo a partir de **15 minutos antes** do horário de início e
+permanece ativo até o fim da sessão (`início + durationMinutes`).
+
+A janela está definida em um único lugar — a constante `LIVE_WINDOW_MINUTES` em
+`src/data/helpers.ts`. Ela também está **anunciada ao aluno no FAQ** da página ("Como acessar o
+evento ao vivo?"): mudar a constante sem atualizar o texto do FAQ deixa a página mentindo.
+
+Além da janela de tempo, o botão só ativa se a sessão tiver `zoomUrl` preenchido. Sessão sem link
+continua desabilitada mesmo no horário — de propósito.
 
 ### Estados do card de sessão
 
-O status é derivado da data da sessão, nunca digitado:
+O status é derivado da data (`getSessionStatus`), nunca digitado:
 
-| Momento | Badge | Botão |
+| Momento | Badge | Botão "Entrar na Aula" |
 |---|---|---|
-| Antes da janela de liberação | `EM BREVE` (âmbar) | "Entrar na Aula" — contorno, desabilitado |
-| A partir de ~15 min antes, durante a sessão | `CONFIRMADO` (verde) | "Entrar na Aula (Zoom)" — verde sólido, ativo |
-| Depois do término | `ENCERRADO` (cinza) | "Assistir Replay" — escuro |
+| Antes de 15 min do início | `Em breve` (âmbar) | desabilitado |
+| De 15 min antes até o término | `Confirmado` (verde) | ativo, verde sólido — abre o Zoom |
+| Depois do término | `Concluído` (cinza) | desabilitado |
 
-Sessões encerradas ganham a marcação "✓ Sessão Concluída" e exibem os links de apoio: Slides da
-Aula, Repositório GitHub e Discussão na Comunidade.
+> 📌 **Divergência do protótipo:** o protótipo previa que sessões encerradas trocassem o botão por
+> "Assistir Replay" e exibissem links de apoio por sessão. Isso **não** está implementado — o card
+> encerrado apenas desabilita o botão. Hoje existe só a seção "Exemplo visual", que é uma
+> demonstração estática de como esse estado ficaria. Implementar exigiria um campo de replay por
+> sessão em `event.ts`.
 
 ### Materiais bloqueados
 
@@ -141,24 +182,45 @@ opacidade reduzida — caso contrário o leitor de tela continua anunciando o el
 
 ## Identidade visual
 
-| Elemento | Cor |
-|---|---|
-| Verde primário (botões, badges, destaques) | `#00C852` |
-| Texto principal | `#212121` |
-| Texto secundário | `#808692` |
-| Texto terciário | `#9CA0AA` |
-| Borda de cards | `#D4D6DA` |
-| Fundo de seção alternada | `#F4F6F9` |
-| Destaque vermelho (hero) | `#C40404` |
+As cores são definidas em `src/styles.css` como variáveis CSS em **oklch** (`:root` para o tema
+claro, `.dark` para o escuro). Para trocar uma cor, altere a variável — nunca escreva cor literal
+em classe de componente.
 
-O tom `#00C852` foi mantido próximo ao `#00c46a` já usado nos demais widgets do Brightspace da XP,
+| Variável | Uso | Equivalente hex |
+|---|---|---|
+| `--primary` | Fundo de botão, ícones, destaques | `#2CC95D` |
+| `--label-accent` | Verde escuro para **texto** ("Semana N") | `#007C18` |
+| `--accent-foreground` | Verde de texto sobre fundo verde-claro | `#007E23` |
+| `--foreground` | Texto principal | `#262626` |
+| `--muted-foreground` | Texto secundário / descrições | `#6A6F77` |
+| `--text-tertiary` | Texto terciário | `#5A5E64` |
+| `--warning` | Texto do badge "Em breve" | `#B54A00` |
+| `--surface-alt` | Fundo de seção alternada | `#F4F6F9` |
+
+O verde de fundo foi mantido próximo ao `#00c46a` já usado nos demais widgets do Brightspace da XP,
 garantindo consistência de marca.
 
-> ⚠️ **Atenção ao contraste.** `#00C852` sobre branco tem contraste de aproximadamente **1,8:1** —
-> muito abaixo do mínimo de 4,5:1 exigido pela WCAG AA para texto. Ele é seguro como **fundo de
-> botão com texto escuro**, mas **não** como cor de texto. Onde o protótipo usa verde em texto
-> (rótulos "Semana N", eyebrows de seção, texto de botão com contorno), é necessário um tom mais
-> escuro da mesma família. Ver *Pendências conhecidas*.
+> ⚠️ **O verde claro não serve como cor de texto.** `--primary` (`#2CC95D`) tem contraste de
+> ~1,9:1 sobre branco. Use-o só como **fundo** de botão com texto escuro. Para verde em texto,
+> existem `--label-accent` e `--accent-foreground`, ambos já escurecidos para passar em AA.
+
+### Contraste medido (WCAG AA — mínimo 4,5:1 para texto)
+
+| Combinação | Contraste | |
+|---|---|---|
+| Texto principal / branco | 15,12:1 | ✅ |
+| Botão sólido (texto escuro / verde) | 6,93:1 | ✅ |
+| Texto terciário / branco | 6,53:1 | ✅ |
+| Rótulo "Semana N" (`label-accent` / branco) | 5,36:1 | ✅ |
+| Link verde (`accent-foreground` / branco) | 5,22:1 | ✅ |
+| Texto secundário / branco | 5,06:1 | ✅ |
+| Badge "Em breve" (`warning` / amarelo-claro) | 4,75:1 | ✅ |
+| Texto secundário / `surface-alt` | 4,67:1 | ✅ |
+| Badge verde (`accent-foreground` / `accent`) | 4,63:1 | ✅ |
+
+Todas as combinações em uso passam em AA. As margens são estreitas em alguns casos — **clarear
+`--muted-foreground` acima de `0.56` ou `--accent-foreground` acima de `0.52` volta a quebrar a
+conformidade.** Os limites estão anotados como comentário no próprio `styles.css`.
 
 ---
 
@@ -184,17 +246,54 @@ não à viewport.
 
 ## Publicação
 
-**Hospedagem:** GitHub Pages  
-**Branch de deploy:** `main` (push automático desencadeia build)  
+**Hospedagem:** GitHub Pages, servindo a pasta `/docs` da branch `main`  
 **Destino no LMS:** Link externo em widget ou página do curso  
 
-O `vite.config.ts` atualmente indica build via Nitro com Cloudflare como target padrão. Para
-GitHub Pages, isso pode precisar de ajuste (output: 'static' em vez de SSR). Confirmar:
+O deploy é manual e tem **dois passos** — o build não roda no servidor:
 
-- [ ] Vite config já está configurado para saída estática (GitHub Pages) ou precisa de ajuste
-- [ ] GitHub Actions está configurado para build + deploy automático em push
-- [ ] URL pública é conhecida (ex: `https://xp-educacao.github.io/mes-da-tecnologia/`)
-- [ ] Link externo está no LMS como referência à URL pública acima
+```bash
+npm run build
+```
+
+```bash
+git add docs && git commit -m "build: atualiza site estático" && git push
+```
+
+O `docs/` é build gerado, mas **é commitado de propósito** — é dele que o GitHub Pages serve. Não
+adicione `docs` ao `.gitignore`.
+
+### Configuração no GitHub (uma vez só)
+
+Em **Settings → Pages**: Source = `Deploy from a branch`, Branch = `main`, Folder = `/docs`.
+
+### Detalhes que fazem isso funcionar
+
+- `base: "./"` no `vite.config.ts` — gera caminhos relativos, então funciona tanto em
+  `usuario.github.io/landing-pages/` quanto localmente. Com o padrão (`/`), os assets dariam 404.
+- `public/.nojekyll` — impede o Jekyll do GitHub de ignorar arquivos e pastas que começam com `_`.
+
+---
+
+## Pendências conhecidas
+
+### Funcionalidade prevista no protótipo e não implementada
+
+Sessões encerradas deveriam trocar o botão por "Assistir Replay" e listar materiais por sessão.
+Hoje o card encerrado apenas desabilita o botão. Exigiria um campo de replay por sessão em
+`event.ts` — ver *Estados do card de sessão*.
+
+### Infraestrutura
+
+- [ ] **Dois lockfiles** (`bun.lock` + `package-lock.json`) — escolher um gerenciador e apagar o outro
+- [ ] URL pública confirmada (ex: `https://xp-educacao.github.io/landing-pages/`)
+- [ ] Link externo cadastrado no LMS apontando para a URL acima
+- [ ] Automatizar o build via GitHub Actions (hoje é manual)
+
+### Links ainda não definidos
+
+Em `src/data/links.ts`, tudo que está como `"#"` continua pendente: calendário, materiais (slides,
+replay, repositório, complementares) e as três redes sociais. Os links de Zoom das sessões a partir
+da Semana 2 também estão vazios (`zoomUrl: ""`).
 
 ---
 

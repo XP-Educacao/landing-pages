@@ -1,8 +1,9 @@
 /**
  * ============================================================
  *  CONTEÚDO EDITÁVEL — Mês da Tecnologia
- *  Altere datas, títulos, instrutores, links e status aqui.
- *  Nenhuma alteração de HTML/CSS é necessária.
+ *  Textos, datas, títulos e instrutores.
+ *  URLs ficam em src/data/links.ts (fonte única).
+ *  O status de cada sessão é derivado de dateTime — não é editável.
  * ============================================================
  */
 
@@ -15,6 +16,8 @@ export type Session = {
   dateTime: string;
   /** Duração da sessão em minutos */
   durationMinutes: number;
+  /** Sobrescreve a data exibida. Use para sessões que cobrem um intervalo (ex: "15/09 a 19/09"). */
+  dateLabel?: string;
   title: string;
   description: string;
   instructor?: string;
@@ -29,8 +32,6 @@ export const hero = {
     "Inteligência Artificial, Tendências e Carreira para Profissionais de Tecnologia. Um ciclo exclusivo de imersões práticas com especialistas do mercado.",
   period: "31 de Agosto a 29 de Setembro",
   format: "Ao vivo via Zoom e Gravações",
-  communityUrl: "https://discord.gg/",
-  calendarUrl: "#",
 };
 
 export const notices = [
@@ -120,6 +121,7 @@ export const weeks: WeekBlock[] = [
         id: "s3-1",
         category: "Trilha Exclusiva",
         dateTime: "2026-09-15T19:00:00-03:00",
+        dateLabel: "15/09 a 19/09",
         durationMinutes: 120,
         title: "Arquitetura de Software",
         description: "Padrões, trade-offs e decisões que sustentam sistemas em escala.",
@@ -130,6 +132,7 @@ export const weeks: WeekBlock[] = [
         id: "s3-2",
         category: "Trilha Exclusiva",
         dateTime: "2026-09-15T19:00:00-03:00",
+        dateLabel: "15/09 a 19/09",
         durationMinutes: 120,
         title: "Engenharia de Dados",
         description: "Pipelines confiáveis, qualidade de dados e arquitetura moderna.",
@@ -140,6 +143,7 @@ export const weeks: WeekBlock[] = [
         id: "s3-3",
         category: "Trilha Exclusiva",
         dateTime: "2026-09-15T19:00:00-03:00",
+        dateLabel: "15/09 a 19/09",
         durationMinutes: 120,
         title: "Segurança da Informação",
         description: "Ameaças atuais, defesa em profundidade e cultura de segurança.",
@@ -150,6 +154,7 @@ export const weeks: WeekBlock[] = [
         id: "s3-4",
         category: "Trilha Exclusiva",
         dateTime: "2026-09-15T19:00:00-03:00",
+        dateLabel: "15/09 a 19/09",
         durationMinutes: 120,
         title: "Data Science & Machine Learning",
         description: "Do experimento ao modelo em produção, com métricas que importam.",
@@ -215,7 +220,6 @@ export const community = {
   title: "Comunidade Pós Tech",
   text: "O ponto de encontro dos estudantes e do time de professores durante todo o Mês da Tecnologia — e depois dele.",
   buttonLabel: "Entrar na Comunidade",
-  url: "https://discord.gg/",
 };
 
 export type LibraryItem = {
@@ -223,7 +227,6 @@ export type LibraryItem = {
   title: string;
   description: string;
   released: boolean;
-  url: string;
 };
 
 export const library: LibraryItem[] = [
@@ -232,28 +235,24 @@ export const library: LibraryItem[] = [
     title: "Slides Completos",
     description: "Apresentações de todas as sessões já realizadas em PDF.",
     released: true,
-    url: "#",
   },
   {
     icon: "replay",
     title: "Replays das Aulas",
     description: "Gravações completas para assistir no seu ritmo.",
     released: true,
-    url: "#",
   },
   {
     icon: "repo",
     title: "Repositórios",
     description: "Códigos-fonte e projetos construídos ao vivo nas aulas.",
     released: false,
-    url: "#",
   },
   {
     icon: "extra",
     title: "Complementares",
     description: "Leituras, artigos e referências indicadas pelos professores.",
     released: false,
-    url: "#",
   },
 ];
 
@@ -284,9 +283,4 @@ export const footer = {
   brand: "XP Pós Tech",
   institutional: "XP Educação | Pós Tech • Mês da Tecnologia 2026",
   support: "Suporte ao Aluno: suporte@xpeducacao.com.br",
-  social: [
-    { label: "Instagram", url: "#" },
-    { label: "YouTube", url: "#" },
-    { label: "LinkedIn", url: "#" },
-  ],
 };

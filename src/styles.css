@@ -80,9 +80,11 @@
   --secondary: oklch(0.968 0.004 247.9);
   --secondary-foreground: oklch(0.269 0 0);
   --muted: oklch(0.968 0.004 247.9);
-  --muted-foreground: oklch(0.616 0.014 258);
+  /* WCAG AA: 5.06:1 em branco, 4.67:1 em surface-alt. Não clarear além de 0.56. */
+  --muted-foreground: oklch(0.54 0.014 258);
   --accent: oklch(0.955 0.035 155);
-  --accent-foreground: oklch(0.6 0.17 148.5);
+  /* WCAG AA: 4.63:1 sobre --accent, 5.22:1 em branco. Não clarear além de 0.52. */
+  --accent-foreground: oklch(0.51 0.17 148.5);
   --surface-alt: oklch(0.972 0.004 247.9);
   --text-tertiary: oklch(0.48 0.011 258);
   --warning: oklch(0.54 0.18 60);
