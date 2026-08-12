@@ -29,13 +29,19 @@ export function Section({
   children,
   alt = false,
   className,
+  id,
 }: {
   children: ReactNode;
   alt?: boolean;
   className?: string;
+  /** Define a âncora da seção (destino de links "#id"). */
+  id?: string;
 }) {
   return (
-    <section className={cn("px-4 py-12 sm:px-6 sm:py-16", alt && "bg-surface-alt", className)}>
+    <section
+      id={id}
+      className={cn("px-4 py-12 sm:px-6 sm:py-16", alt && "bg-surface-alt", className)}
+    >
       <div className="mx-auto w-full max-w-5xl">{children}</div>
     </section>
   );
@@ -53,12 +59,17 @@ export function SectionTitle({ title, subtitle }: { title: string; subtitle?: st
 }
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 export const buttonStyles = {
+  /** Ação principal — verde preenchido. */
   solid: cn(base, "bg-primary text-primary-foreground hover:bg-primary/90"),
+  /** Ação secundária — verde claro (materiais, replay). */
+  soft: cn(base, "bg-accent text-accent-foreground hover:bg-accent/70"),
   outline: cn(base, "border border-border bg-background text-accent-foreground hover:bg-accent/60"),
   ghost: cn(base, "border border-border bg-background text-foreground hover:bg-surface-alt"),
+  /** Botão Zoom — verde com hover azul. */
+  zoom: cn(base, "bg-primary text-white hover:bg-info hover:text-info-foreground"),
   disabled: cn(base, "cursor-not-allowed border border-border bg-surface-alt text-text-tertiary"),
 };
 
