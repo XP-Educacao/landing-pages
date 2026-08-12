@@ -1,0 +1,27 @@
+[
+  {
+    "id": "aula-ia-01",
+    "titulo": "O que realmente é fluência em IA para profissionais de tecnologia",
+    "descricao": "Entenda como a IA está mudando o mercado de tecnologia e quais habilidades serão essenciais para profissionais que desejam se destacar nos próximos anos. Transmissão ao vivo via Zoom.",
+    "local": "Online — Zoom",
+    "inicio": "2026-08-31T19:00:00-03:00",
+    "fim": "2026-08-31T20:30:00-03:00"
+  },
+  {
+    "id": "aula-agentes-02",
+    "titulo": "Como empresas constroem agentes de IA",
+    "descricao": "Acompanhe a construção de um agente de IA do zero e descubra como equipes de tecnologia desenvolvem aplicações modernas utilizando modelos de linguagem e integrações com ferramentas externas.",
+    "local": "Online — Zoom",
+    "inicio": "2026-09-01T19:00:00-03:00",
+    "fim": "2026-09-01T20:30:00-03:00"
+  },
+  {
+    "id": "aula-modelagem-03",
+    "titulo": "Modelagem de dados para escala global em NoSQL",
+    "descricao": "Aula já realizada. O registro permanece no arquivo para manter histórico e rastreabilidade; o botão fica desabilitado por causa do campo ativo.",
+    "local": "Online — Zoom",
+    "inicio": "2026-07-14T19:00:00-03:00",
+    "fim": "2026-07-14T20:30:00-03:00",
+    "ativo": false
+  }
+]

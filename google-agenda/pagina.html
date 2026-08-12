@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aulas ao vivo — Adicionar à agenda</title>
+
+    <!--
+      ==========================================================================
+       pagina.html — CAMADA DE APRESENTAÇÃO
+      ==========================================================================
+
+       Papel na arquitetura (três camadas):
+
+         1. DADOS         aulas.json    → o que cada aula é
+         2. LÓGICA        calendar.js   → monta a URL e liga os botões
+         3. APRESENTAÇÃO  pagina.html   → ESTE ARQUIVO
+
+       Cada card é independente: título, texto e layout podem variar livremente
+       de uma aula para outra. O único contrato com as outras camadas é o botão:
+
+           <button data-aula-id="aula-sql-01" class="btn-add-calendar">
+
+       REGRA: nenhum dado da aula (data, hora, local, descrição) fica escrito
+       aqui. Só o id. Data escrita no HTML vira segunda fonte de verdade e sai
+       de sincronia com o JSON na primeira alteração de agenda.
+
+       PARA ADICIONAR UMA AULA: cadastre no aulas.json, copie um card abaixo e
+       troque o data-aula-id. Não é preciso tocar no calendar.js.
+
+       ⚠️  Abrir este arquivo com duplo clique (file://) NÃO funciona: os
+           navegadores bloqueiam fetch de arquivo local. Rode nesta pasta:
+
+               python -m http.server 8000
+
+           e acesse http://localhost:8000/pagina.html
+      ==========================================================================
+    -->
+
+    <style>
+      :root {
+        --verde: #05b50f;
+        --verde-claro: #e8f5e9;
+        --texto: #212121;
+        --texto-suave: #6b7280;
+        --borda: #e0e0e0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 2rem 1rem;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: var(--texto);
+        line-height: 1.5;
+      }
+      main {
+        max-width: 60rem;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.75rem;
+        margin: 0 0 0.5rem;
+      }
+      .subtitulo {
+        color: var(--texto-suave);
+        margin: 0 0 2rem;
+      }
+      .aviso {
+        margin: 0 0 1.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #f0c36d;
+        background: #fdf6e3;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .grade {
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        padding: 1.25rem;
+        border: 1px solid var(--borda);
+        border-radius: 0.75rem;
+        background: #fff;
+      }
+      .card h2 {
+        font-size: 1.05rem;
+        margin: 0.5rem 0 0.5rem;
+      }
+      .card p {
+        margin: 0 0 1rem;
+        font-size: 0.9rem;
+        color: var(--texto-suave);
+      }
+      .etiqueta {
+        align-self: flex-start;
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        background: var(--verde-claro);
+        color: #008100;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      .btn-add-calendar {
+        margin-top: auto;
+        padding: 0.7rem 1rem;
+        border: 0;
+        border-radius: 0.6rem;
+        background: var(--verde);
+        color: var(--texto);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-add-calendar:hover:not(:disabled) {
+        filter: brightness(0.94);
+      }
+      .btn-add-calendar:disabled {
+        background: #f4f4f5;
+        color: #737373;
+        cursor: not-allowed;
+      }
+      .btn-add-calendar:focus-visible {
+        outline: 2px solid var(--verde);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Aulas ao vivo</h1>
+      <p class="subtitulo">
+        Clique em “Adicionar à agenda” para abrir o Google Calendar já preenchido.
+      </p>
+
+      <!-- Preenchido pelo calendar.js somente quando o carregamento falha. -->
+      <p class="aviso" data-agenda-status hidden></p>
+
+      <div class="grade">
+        <!-- ============ CARD 1 ============ -->
+        <article class="card">
+          <span class="etiqueta">Abertura</span>
+          <h2>O que realmente é fluência em IA</h2>
+          <p>
+            O que muda no dia a dia de quem constrói software quando a IA deixa de ser hype e vira
+            ferramenta de trabalho.
+          </p>
+          <button data-aula-id="aula-ia-01" class="btn-add-calendar">Adicionar à agenda</button>
+        </article>
+
+        <!-- ============ CARD 2 — layout diferente de propósito ============ -->
+        <article class="card">
+          <span class="etiqueta">Workshop</span>
+          <h2>Como empresas constroem agentes de IA</h2>
+          <p>Construção de um agente do zero, ao vivo, com integrações reais.</p>
+          <p><strong>Pré-requisito:</strong> lógica de programação.</p>
+          <button data-aula-id="aula-agentes-02" class="btn-add-calendar">Adicionar à agenda</button>
+        </article>
+
+        <!-- ============ CARD 3 — aula com "ativo": false no JSON ============
+             O botão é desabilitado automaticamente pelo calendar.js. O card
+             permanece na página para preservar o histórico da turma. -->
+        <article class="card">
+          <span class="etiqueta">Encerrada</span>
+          <h2>Modelagem de dados para escala global em NoSQL</h2>
+          <p>Aula já realizada — mantida aqui como registro.</p>
+          <button data-aula-id="aula-modelagem-03" class="btn-add-calendar">
+            Adicionar à agenda
+          </button>
+        </article>
+
+        <!-- ============ CARD 4 — ERRO PROPOSITAL, para demonstração ============
+             Este data-aula-id não existe no aulas.json. Ao abrir a página você
+             verá um console.warn nomeando o id órfão e um contorno vermelho no
+             botão (contorno só em localhost/file://, nunca em produção).
+             Remova este card quando terminar de conferir. -->
+        <article class="card">
+          <span class="etiqueta">Demonstração</span>
+          <h2>Card com id digitado errado</h2>
+          <p>Existe para mostrar como a validação avisa sobre um id órfão.</p>
+          <button data-aula-id="aula-typo-99" class="btn-add-calendar">Adicionar à agenda</button>
+        </article>
+      </div>
+    </main>
+
+    <script src="./calendar.js"></script>
+    <script>
+      // Inicialização. `defer` não é usado porque calendar.js é um script comum
+      // (sem type="module"), e aqui o DOM já está pronto: este <script> está no
+      // fim do body, então todos os cards acima já existem e podem ser validados.
+      Agenda.inicializar();
+    </script>
+  </body>
+</html>
