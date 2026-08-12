@@ -28,6 +28,14 @@ const socialIcons = {
   linkedin: Linkedin,
 } as const;
 
+function DiscordIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.955 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+    </svg>
+  );
+}
+
 function Index() {
   return (
     <main className="min-h-screen bg-background">
@@ -38,29 +46,68 @@ function Index() {
         </div>
       </div>
 
-      {/* 1. HERO */}
-      <section className="border-b border-border px-4 py-12 sm:px-6 sm:py-16">
-        <div className="mx-auto w-full max-w-5xl">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            {hero.title}
-          </h1>
-          <div className="mt-5 max-w-3xl space-y-4">
-            {hero.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-base leading-relaxed text-muted-foreground">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-          <div className="mt-8">
-            <ActionLink href={`#${AGENDA_ANCHOR}`} variant="solid">
-              <CalendarDays className="size-4" aria-hidden="true" />
-              {hero.ctaLabel}
-            </ActionLink>
-          </div>
-        </div>
-      </section>
+{/* 1. HERO */}
+<section className="px-4 py-12 sm:px-6 sm:py-16">
+  <div className="mx-auto w-full max-w-5xl">
+    <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+      {hero.title}
+    </h1>
+    <div className="mt-5 max-w-3xl space-y-4">
+      {hero.paragraphs.map((paragraph) => (
+        <p key={paragraph} className="text-base leading-relaxed text-muted-foreground">
+          {paragraph}
+        </p>
+      ))}
+    </div>
+    <div className="mt-8">
+      <ActionLink href={`#${AGENDA_ANCHOR}`} variant="solid">
+        <CalendarDays className="size-4" aria-hidden="true" />
+        {hero.ctaLabel}
+      </ActionLink>
+    </div>
+  </div>
+</section>
 
-      {/* 2. AVISOS */}
+{/* 2. COMUNIDADE */}
+<Section className="pt-4 sm:pt-6">
+  
+  <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+    <div>
+      <SectionTitle
+        title="Comunidade Tech"
+        subtitle="Um espaço vivo para trocar com quem está estudando e construindo junto com você."
+      />
+      <ul className="space-y-3">
+        {communityBenefits.map((benefit) => (
+          <li key={benefit} className="flex items-start gap-3 text-sm text-muted-foreground">
+            <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+            <span className="min-w-0">{benefit}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div className="rounded-2xl border border-primary/40 bg-accent/40 p-7 shadow-[var(--shadow-featured)] sm:p-9">
+      <Badge className="bg-white text-[#5865F2]">
+        <DiscordIcon className="size-4 text-[#5865F2]" />
+        {community.badge}
+      </Badge>
+      <h3 className="mt-4 text-xl font-bold text-foreground">{community.title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{community.text}</p>
+      <div className="mt-6">
+        <ActionLink href={links.community} variant="solid" className="w-full sm:w-auto">
+          <Users className="size-4" aria-hidden="true" />
+          {community.buttonLabel}
+        </ActionLink>
+      </div>
+    </div>
+  </div>
+</Section>
+
+      
+
+      
+
+      {/* 3. AVISOS */}
       <Section alt>
         <SectionTitle title={sections.notices} />
         <ul className="grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:grid-cols-2 sm:p-8 lg:grid-cols-4">
@@ -78,7 +125,7 @@ function Index() {
         </ul>
       </Section>
 
-      {/* 3. AULAS DA SEMANA */}
+      {/* 4. AULAS DA SEMANA */}
       <Section>
         <SectionTitle
           title={sections.weeklyClasses}
@@ -87,7 +134,7 @@ function Index() {
         <WeeklyClasses />
       </Section>
 
-      {/* 4. AGENDA DO EVENTO */}
+      {/* 5. AGENDA DO EVENTO */}
       <Section alt className="scroll-mt-4" id={AGENDA_ANCHOR}>
         <SectionTitle
           title={sections.agenda}
@@ -96,44 +143,10 @@ function Index() {
         <Agenda />
       </Section>
 
-      {/* 5. FAQ */}
+      {/* 6. FAQ */}
       <Section>
         <SectionTitle title={sections.faq} subtitle={`${faq.length} dúvidas frequentes.`} />
         <Faq />
-      </Section>
-
-      {/* 6. COMUNIDADE */}
-      <Section alt>
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-          <div>
-            <SectionTitle
-              title="Comunidade Tech"
-              subtitle="Um espaço vivo para trocar com quem está estudando e construindo junto com você."
-            />
-            <ul className="space-y-3">
-              {communityBenefits.map((benefit) => (
-                <li key={benefit} className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                  <span className="min-w-0">{benefit}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-2xl border border-primary/40 bg-accent/40 p-7 shadow-[var(--shadow-featured)] sm:p-9">
-            <Badge tone="green">
-              <MessagesSquare className="size-4" aria-hidden="true" />
-              {community.badge}
-            </Badge>
-            <h3 className="mt-4 text-xl font-bold text-foreground">{community.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{community.text}</p>
-            <div className="mt-6">
-              <ActionLink href={links.community} variant="solid" className="w-full sm:w-auto">
-                <Users className="size-4" aria-hidden="true" />
-                {community.buttonLabel}
-              </ActionLink>
-            </div>
-          </div>
-        </div>
       </Section>
 
       {/* 7. RODAPÉ */}
