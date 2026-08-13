@@ -71,6 +71,18 @@ export const buttonStyles = {
   ghost: cn(base, "border border-border bg-background text-foreground hover:bg-surface-alt"),
   /** Botão Zoom — verde com hover azul. */
   zoom: cn(base, "bg-primary text-white hover:bg-info hover:text-info-foreground"),
+  /**
+   * Mesma aparência do desabilitado, porém CLICÁVEL.
+   *
+   * Serve para ação que perdeu prioridade mas continua válida — o acesso a uma
+   * aula já encerrada, por exemplo. Comunica "não é mais o caminho principal"
+   * sem tirar a possibilidade de quem ainda precisa.
+   *
+   * O hover escurece o texto em vez de mudar o fundo: manter o fundo preserva o
+   * contraste de 4,5:1, enquanto clarear/escurecer o fundo o derrubaria.
+   */
+  quiet: cn(base, "border border-border bg-surface-alt text-text-tertiary hover:text-foreground"),
+  /** Aparência apagada E bloqueada — sem link cadastrado. */
   disabled: cn(base, "cursor-not-allowed border border-border bg-surface-alt text-text-tertiary"),
 };
 

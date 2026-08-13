@@ -31,7 +31,7 @@ function SessionAction({
   children,
 }: {
   url?: string | undefined;
-  variant?: "solid" | "soft";
+  variant?: "solid" | "soft" | "quiet";
   children: ReactNode;
 }) {
   if (url === undefined) return null;
@@ -130,14 +130,17 @@ export function SessionCard({
       {/* Empurra as ações para a base do card, alinhando cards de alturas diferentes. */}
       <div className="mt-auto pt-6">
         <div className="flex flex-wrap gap-3 [&>*]:w-full sm:[&>*]:w-auto">
-          <SessionAction url={session.registrationUrl} variant="solid">
+          {/* Depois do encerramento, inscrição e acesso trocam para a aparência
+              apagada (variante `quiet`) mas SEGUEM clicáveis: perdem o destaque
+              visual sem bloquear quem ainda precisa deles. */}
+          <SessionAction url={session.registrationUrl} variant={ended ? "quiet" : "solid"}>
             <UserPlus className="size-4" aria-hidden="true" />
             Quero me Inscrever
           </SessionAction>
 
           <ActionLink
             href={zoomAvailable ? session.zoomUrl : "#"}
-            variant="zoom"
+            variant={ended ? "quiet" : "zoom"}
             disabled={!zoomAvailable}
           >
             <Video className="size-4" aria-hidden="true" />
