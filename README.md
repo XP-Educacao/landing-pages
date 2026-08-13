@@ -70,7 +70,7 @@ automaticamente — então para acrescentar uma aula, basta adicionar um item ao
 {
   id: "semana-2",
   label: "Semana 2",
-  dateRange: "08/09",
+  label: "Semana 2",
   theme: "Tendências e Mercado para 2026",
   layout: "stack",
   sessions: [
@@ -94,7 +94,7 @@ const AUTOPLAY_MS = 6000;   // 6 segundos. Use 3000 para testar rápido, 10000 p
 A passagem para sozinha enquanto o mouse está sobre o carrossel ou o foco do teclado está dentro
 dele, para dar tempo de ler e de clicar nos botões do card.
 
-Campos da semana: `label` e `dateRange` montam o texto da aba ("Semana 2 (08/09)"); `theme` aparece
+Campos da semana: `label` é o texto do botão da semana ("Semana 2"); `theme` aparece
 acima dos cards; `layout` define o arranjo na Agenda (`"stack"` = uma coluna, `"grid"` = duas
 colunas, usado nas trilhas da Semana 3).
 
@@ -170,9 +170,11 @@ necessários — largura exibida × densidade da tela. Um celular de 375px com t
 
 **Regras importantes ao editar:**
 
-- **Datas em formato ISO** (`2026-09-08T19:00:00-03:00`). O status do card — "Em breve",
-  "Confirmado", "Concluído" — e a liberação do botão "Entrar na Aula" são calculados
-  automaticamente a partir dessa data. Não existe campo de status para digitar à mão.
+- **Datas em formato ISO** (`2026-09-08T19:00:00-03:00`), sempre com o fuso `-03:00`. A liberação do
+  botão de acesso e o rótulo "Aula encerrada" são calculados a partir dessa data e de
+  `durationMinutes`. Não existe campo de status para digitar à mão.
+- **Não existe hora de término.** O fim é `dateTime + durationMinutes`. Para mudar quando a aula
+  acaba, mude a duração.
 - **Zoom ainda não definido:** deixe `zoomUrl: ""` (string vazia). Isso mantém o botão desabilitado
   mesmo dentro da janela de liberação — evita link quebrado na cara do aluno.
 - **Sessão que cobre vários dias:** use `dateLabel` para sobrescrever a data exibida
@@ -258,32 +260,32 @@ npm run dev
 
 ## Estrutura da página
 
-A ordem segue o protótipo (Figma):
+Ordem atual, na sequência em que aparecem em `src/routes/index.tsx`:
 
 0. **Banner** — masthead da marca (XPE Community /Tech)
 1. **Hero** — "Bem-vindo ao XPE Community Tech!", três parágrafos de apresentação e um CTA único,
-   *Acessar Agenda*, que rola até a seção 4
-2. **Avisos Importantes sobre o evento** — 4 avisos numerados num único card: acesso ao Zoom,
+   *Acessar Agenda*, que rola com animação até a seção 5
+2. **Comunidade** — Discord oficial, com 5 benefícios de participação
+3. **Avisos Importantes sobre o evento** — 4 avisos numerados num único card: acesso ao Zoom,
    publicação de links, materiais em até 24h, certificado em até 5 dias úteis
-3. **Aulas da Semana** — botões de semana + **carrossel** das aulas da semana escolhida, que passam
+4. **Aulas da Semana** — botões de semana + **carrossel** das aulas da semana escolhida, que passam
    automaticamente por tempo. Abre já na semana em andamento (ou na próxima a acontecer)
-4. **Agenda do Evento** — programação completa, semana a semana, com tema e os quatro botões por
-   aula (inscrição, Zoom, materiais, replay):
-   - Semana 1 (31/08 a 01/09) — IA aplicada ao trabalho do profissional de tecnologia
+5. **Agenda do Evento** — programação completa, semana a semana, com tema e os botões por aula
+   (inscrição, Zoom, calendário, materiais, replay):
+   - Semana 1 (31/08 e 01/09) — IA aplicada ao trabalho do profissional de tecnologia
    - Semana 2 (08/09) — Tendências e Mercado para 2026
-   - Semana 3 (15/09 a 22/09) — Trilhas Especializadas por Pós-Graduação (grid de 2 colunas:
+   - Semana 3 (15/09 e 22/09) — Trilhas Especializadas por Pós-Graduação (grid de 2 colunas:
      Arquitetura de Software, Engenharia de Dados, Segurança da Informação, Data Science & ML)
    - Semana 4 (29/09) — Carreira e futuro do profissional de tecnologia
-5. **FAQ do Evento** — accordion com 4 perguntas
-6. **Comunidade** — Discord oficial, com 5 benefícios de participação
-7. **Rodapé** — identidade da marca, redes sociais e contato de suporte
+6. **FAQ do Evento** — accordion com 4 perguntas
+7. **Rodapé** — nome da marca e três links: Instagram, site da XP Educação e LinkedIn
 
-As seções 3 e 4 leem o **mesmo** array `weeks` de `src/data/event.ts`: o carrossel mostra a semana
+> A seção **Comunidade** subiu para a posição 2 (no protótipo ela não existia). A ordem do protótipo
+> era hero → avisos → aulas → agenda → FAQ.
+
+As seções 4 e 5 leem o **mesmo** array `weeks` de `src/data/event.ts`: o carrossel mostra a semana
 selecionada em cards compactos, a Agenda mostra tudo em cards completos. Uma aula cadastrada aparece
 automaticamente nas duas.
-
-> As seções 6 e 7 não constam do protótipo, mas foram mantidas porque guardam informação que não
-> está em nenhum outro lugar da página: o convite para o Discord e o e-mail de suporte ao aluno.
 
 ---
 
@@ -292,27 +294,56 @@ automaticamente nas duas.
 Estas regras são **especificação do protótipo**, não detalhe de implementação. Alterá-las muda o
 comportamento acordado com a área acadêmica.
 
+### As duas margens de horário
+
+Duas constantes independentes em `src/data/helpers.ts` governam tudo que muda com o relógio:
+
+| Constante | Valor | O que faz |
+|---|---|---|
+| `LIVE_WINDOW_MINUTES` | 30 | antecedência com que o acesso **abre** |
+| `OVERTIME_TOLERANCE_MINUTES` | 30 | tolerância após o término previsto antes de a aula contar como **encerrada** |
+
+São separadas de propósito: a primeira responde "já pode entrar", a segunda "a transmissão acabou".
+Mudar uma não deve mexer na outra.
+
+> ⚠️ O valor de `LIVE_WINDOW_MINUTES` está **anunciado ao aluno no FAQ** ("Como acessar o evento ao
+> vivo?"). Mudar a constante sem atualizar o texto deixa a página prometendo uma coisa e fazendo
+> outra.
+
 ### Liberação do botão de aula
 
-O botão "Entrar na Aula" fica ativo a partir de **30 minutos antes** do horário de início e
-permanece ativo até o fim da sessão (`início + durationMinutes`).
+O acesso **abre 30 minutos antes** do início e **não fecha mais** — o link segue clicável
+indefinidamente. É intencional: a sala e a gravação podem continuar úteis depois, e um link que
+morre no minuto do encerramento deixa quem chegou atrasado sem nada.
 
-A janela está definida em um único lugar — a constante `LIVE_WINDOW_MINUTES` em
-`src/data/helpers.ts`. Ela também está **anunciada ao aluno no FAQ** da página ("Como acessar o
-evento ao vivo?"): mudar a constante sem atualizar o texto do FAQ deixa a página mentindo.
-
-Além da janela de tempo, o botão só ativa se a sessão tiver `zoomUrl` preenchido. Sessão sem link
-continua desabilitada mesmo no horário — de propósito.
+Além do horário, o botão só ativa se a sessão tiver `zoomUrl` preenchido. Sessão sem link continua
+desabilitada mesmo no horário — de propósito, para não expor link quebrado.
 
 ### Estados do card de sessão
 
-O status é derivado da data (`getSessionStatus`), nunca digitado:
+O badge é **fixo em "Confirmado"** (`src/data/mappers.ts`). "Em breve" era lido por parte dos alunos
+como "ainda não confirmamos esta aula", o que enfraquecia a programação. Quando a aula acontece já
+está na data e hora exibidas no card.
 
-| Momento | Badge | Botão "Entrar na Aula" |
-|---|---|---|
-| Antes de 30 min do início | `Em breve` (âmbar) | desabilitado |
-| De 30 min antes até o término | `Confirmado` (verde) | ativo, verde sólido — abre o Zoom |
-| Depois do término | `Concluído` (cinza) | desabilitado |
+O relógio governa apenas os botões. Numa aula das 19h às 20h30:
+
+| Momento | Badge | Botão de acesso | Quero me Inscrever |
+|---|---|---|---|
+| Até 18h29 | `Confirmado` | apagado e **bloqueado** | verde, clicável |
+| 18h30 às 20h30 | `Confirmado` | verde — "Entrar na Aula (Zoom)" | verde, clicável |
+| 20h30 às 20h59 (prorrogação) | `Confirmado` | verde — "Entrar na Aula (Zoom)" | verde, clicável |
+| A partir de 21h00 | `Confirmado` | apagado, **mas clicável** — "Aula encerrada" | apagado, **mas clicável** |
+
+A distinção entre as duas últimas colunas da tabela está em duas variantes de botão que parecem
+iguais e se comportam diferente (`src/components/event/ui.tsx`):
+
+- **`disabled`** — aparência apagada **e** bloqueada. É um `<span aria-disabled>`, sem destino.
+  Usada quando não há link cadastrado.
+- **`quiet`** — a mesma aparência, porém um `<a>` clicável. Usada depois do encerramento: a ação
+  perde o destaque visual sem bloquear quem ainda precisa dela.
+
+O rótulo "Aula encerrada" (`ENDED_ZOOM_LABEL` em `event.ts`) sobrescreve até um `zoomLabel` próprio
+da sessão — a informação de encerramento vale mais que o rótulo customizado.
 
 ### Botão "Adicionar ao Calendário"
 
@@ -409,10 +440,27 @@ matiz e a saturação da marca foram preservadas — só a luminância caiu:
 > branco. Use-o só como **fundo**, com texto escuro por cima. Para verde em texto existe
 > `--accent-foreground`, já escurecido.
 
-> 📌 **Divergência deliberada do protótipo:** o Figma usa texto **branco** sobre os botões verdes,
-> o que dá 2,75:1 e reprova em AA. Aqui o texto sobre verde é escuro (`#212121`), o que dá 5,84:1
-> mantendo o mesmo verde de fundo. Escurecer o verde o bastante para o branco passar exigiria um
-> tom quase militar, descaracterizando a marca.
+### Texto branco nos botões verdes — desvio conhecido
+
+`--primary-foreground` é **branco** (`oklch(1 0 0)`), como no protótipo do Figma. Sobre o verde
+`#05B50F` isso dá **2,76:1** e **reprova em WCAG AA** (mínimo 4,5:1).
+
+É decisão de projeto, tomada com o número à vista. O token é o ponto único: mudar aquela linha do
+`styles.css` afeta todos os botões, o botão da semana selecionada e os componentes shadcn de uma vez.
+
+As três combinações possíveis, para quem revisitar:
+
+| Opção | Verde | Texto | AA |
+|---|---|---|---|
+| **Em uso** | `#05B50F` vibrante | branco | ❌ 2,76:1 |
+| Texto escuro | `#05B50F` vibrante | `#212121` | ✅ 5,84:1 |
+| Verde fechado | `#008A00` | branco | ✅ 4,53:1 |
+
+Reduzir a saturação não resolve: em qualquer chroma, o verde precisa cair para a mesma faixa de
+luminosidade para o branco passar — o que descaracteriza a marca.
+
+Curiosamente, a variante `quiet` (aparência apagada, usada em aula encerrada) é a única dos botões
+que passa com folga: 4,54:1.
 
 ### Contraste medido (WCAG AA — mínimo 4,5:1 para texto)
 
@@ -422,20 +470,22 @@ Medido no DOM renderizado do build de produção, resolvendo as cores finais em 
 |---|---|---|
 | `h1` / branco | 16,10:1 | ✅ |
 | Título de seção / `surface-alt` | 15,43:1 | ✅ |
-| Aba selecionada (texto escuro / verde) | 13,06:1 | ✅ |
-| Aba não selecionada / `tab-idle` | 5,84:1 | ✅ |
-| Botão verde sólido (texto escuro / verde) | 5,84:1 | ✅ |
+| Aba de semana não selecionada / `tab-idle` | 5,84:1 | ✅ |
 | Rótulo "Semana N" (`accent-foreground`) | 4,86:1 | ✅ |
 | Parágrafo do hero / branco | 4,83:1 | ✅ |
 | Descrição de aula / branco | 4,83:1 | ✅ |
-| Badge "Em breve" (`warning` / amarelo-claro) | 4,78:1 | ✅ |
-| Botão desabilitado (`text-tertiary` / `surface-alt`) | 4,54:1 | ✅ |
+| Botão `quiet` e `disabled` (`text-tertiary` / `surface-alt`) | 4,54:1 | ✅ |
 | Badge de categoria (`accent-foreground` / `accent`) | 4,51:1 | ✅ |
 | Número do aviso (`accent-foreground` / `accent`) | 4,51:1 | ✅ |
+| **Botão verde (branco / `#05B50F`)** | **2,76:1** | ❌ |
+| **Aba de semana selecionada (branco / `#05B50F`)** | **2,76:1** | ❌ |
 
-Todas as 12 combinações em uso passam em AA. As margens são estreitas — **clarear
-`--accent-foreground` acima de `0.51` ou `--text-tertiary` acima de `0.557` volta a quebrar a
-conformidade.** Os limites estão anotados como comentário no próprio `styles.css`.
+As margens são estreitas nas que passam — **clarear `--accent-foreground` acima de `0.51` ou
+`--text-tertiary` acima de `0.557` volta a quebrar a conformidade.** Os limites estão anotados como
+comentário no próprio `styles.css`.
+
+As duas reprovações vêm da mesma escolha: texto branco sobre o verde da marca. Ver *Texto branco nos
+botões verdes* acima.
 
 ---
 
@@ -448,7 +498,28 @@ Página institucional de universidade — sujeita a auditoria. Requisitos que de
 - Foco visível (`:focus-visible`, contorno de 2px)
 - SVG decorativo com `aria-hidden="true"`
 - Contraste mínimo de 4,5:1 em texto
-- Estados desabilitados desabilitados de verdade, não só visualmente
+- Estados desabilitados desabilitados de verdade, não só visualmente — a variante `quiet` existe
+  justamente para o caso oposto: aparência apagada com o link **funcionando**
+- Rolagem animada e passagem do carrossel respeitam `prefers-reduced-motion`
+
+### Rolagem animada até a Agenda
+
+O botão "Acessar Agenda" rola com animação, implementada em `src/lib/scroll.ts`.
+
+**Por que em JavaScript e não `scroll-behavior: smooth` no CSS:** a versão em CSS torna animada toda
+rolagem da página, inclusive as que o TanStack Router dispara na restauração de scroll
+(`scrollRestoration` está ligado em `src/router.tsx`). As duas competem, uma corta a outra, e a
+página anda um trecho curto e para.
+
+Na implementação atual o clique chama `preventDefault()` e **não altera o hash** — assim o router não
+entra em cena. A posição é escrita quadro a quadro, com duração proporcional à distância.
+
+> ⚠️ O `styles.css` mantém `scroll-behavior: auto` de propósito. Trocar para `smooth` reintroduz o
+> conflito descrito acima.
+
+Três constantes no topo de `scroll.ts` controlam o ritmo: `MIN_DURATION_MS`, `MAX_DURATION_MS` e
+`MS_PER_1000PX`. A animação cancela se a pessoa rolar, arrastar ou teclar durante o percurso, e é
+substituída por salto direto sob `prefers-reduced-motion`.
 
 > 📌 **Desvio conhecido — WCAG 2.2.2 "Pause, Stop, Hide" (nível A).** As aulas passam
 > automaticamente e **não há botão de pausa**, por decisão de projeto (o controle foi removido a
@@ -542,9 +613,31 @@ Pontos onde o protótipo estava incompleto ou ambíguo e a decisão precisa ser 
 
 ### Links ainda não definidos
 
-Todos os campos de URL das sessões em `src/data/event.ts` estão vazios (`""`), o que mantém os
-botões desabilitados: `zoomUrl`, `registrationUrl`, `materialsUrl` e `replayUrl` de todas as aulas.
-Em `src/data/links.ts`, as três redes sociais seguem como `"#"`.
+| Campo | Situação |
+|---|---|
+| `zoomUrl` | ✅ preenchido nas 10 aulas |
+| `registrationUrl` | ✅ preenchido nas 10 aulas |
+| `materialsUrl` | ⬜ vazio nas 10 — botão desabilitado |
+| `replayUrl` | ⬜ vazio nas 10 — botão desabilitado |
+| Redes sociais (`links.ts`) | ✅ Instagram, site da XP e LinkedIn |
+| Discord (`links.ts`) | ✅ configurado |
+
+> Hoje `zoomUrl` e `registrationUrl` apontam para a **mesma** URL de registro do Zoom em cada aula.
+> Funciona, mas as duas têm disponibilidades diferentes: a inscrição fica clicável sempre, o acesso
+> só a partir de 30 min antes. Se houver um link de *join* da reunião distinto do de *register*, o
+> ideal é separar os dois.
+
+### Textos a alinhar
+
+Três informações de prazo aparecem em mais de um lugar e hoje não batem:
+
+| Informação | Avisos (seção 3) | FAQ (seção 6) |
+|---|---|---|
+| Materiais e replays | "em até **24h** após cada aula" | "em até **78 horas** após cada sessão" |
+| Certificado | "em até **5 dias úteis**" | "Em breve mais informações" |
+
+Vale escolher uma versão de cada e replicar. Ambos os textos estão em `src/data/event.ts`, em
+`notices` e `faq`.
 
 ### Imagens
 
