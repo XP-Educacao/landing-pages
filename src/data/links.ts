@@ -10,9 +10,9 @@ export const links = {
   /** Botão "Entrar na Comunidade". */
   community: "https://discord.gg/ZfM3sFWrw",
   social: {
-    instagram: "#",
-    youtube: "#",
-    linkedin: "#",
+    instagram: "https://www.instagram.com/xpeducacao/",
+    xp: "https://www.xpeducacao.com.br/",
+    linkedin: "https://www.linkedin.com/school/xpeducacao/",
   },
 } as const;
 

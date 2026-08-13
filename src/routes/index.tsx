@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   CalendarDays,
   Check,
+  Globe,
   Instagram,
   Linkedin,
   MessagesSquare,
   Users,
-  Youtube,
 } from "lucide-react";
 import { community, communityBenefits, faq, footer, hero, notices, sections } from "@/data/event";
 import { images } from "@/data/images";
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
 
 const socialIcons = {
   instagram: Instagram,
-  youtube: Youtube,
+  xp: Globe,
   linkedin: Linkedin,
 } as const;
 
@@ -46,66 +46,65 @@ function Index() {
         </div>
       </div>
 
-{/* 1. HERO */}
-<section className="px-4 py-12 sm:px-6 sm:py-16">
-  <div className="mx-auto w-full max-w-5xl">
-    <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-      {hero.title}
-    </h1>
-    <div className="mt-5 max-w-3xl space-y-4">
-      {hero.paragraphs.map((paragraph) => (
-        <p key={paragraph} className="text-base leading-relaxed text-muted-foreground">
-          {paragraph}
-        </p>
-      ))}
-    </div>
-    <div className="mt-8">
-      <ActionLink href={`#${AGENDA_ANCHOR}`} variant="solid">
-        <CalendarDays className="size-4" aria-hidden="true" />
-        {hero.ctaLabel}
-      </ActionLink>
-    </div>
-  </div>
-</section>
+      {/* 1. HERO */}
+      <section className="px-4 py-12 sm:px-6 sm:py-16">
+        <div className="mx-auto w-full max-w-5xl">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            {hero.title}
+          </h1>
+          <div className="mt-5 max-w-3xl space-y-4">
+            {hero.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="text-base leading-relaxed text-muted-foreground">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+          <div className="mt-8">
+            <ActionLink href={`#${AGENDA_ANCHOR}`} variant="solid" className="text-white">
+              <CalendarDays className="size-4" aria-hidden="true" />
+              {hero.ctaLabel}
+            </ActionLink>
+          </div>
+        </div>
+      </section>
 
-{/* 2. COMUNIDADE */}
-<Section className="pt-4 sm:pt-6">
-  
-  <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-    <div>
-      <SectionTitle
-        title="Comunidade Tech"
-        subtitle="Um espaço vivo para trocar com quem está estudando e construindo junto com você."
-      />
-      <ul className="space-y-3">
-        {communityBenefits.map((benefit) => (
-          <li key={benefit} className="flex items-start gap-3 text-sm text-muted-foreground">
-            <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-            <span className="min-w-0">{benefit}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div className="rounded-2xl border border-primary/40 bg-accent/40 p-7 shadow-[var(--shadow-featured)] sm:p-9">
-      <Badge className="bg-white text-[#5865F2]">
-        <DiscordIcon className="size-4 text-[#5865F2]" />
-        {community.badge}
-      </Badge>
-      <h3 className="mt-4 text-xl font-bold text-foreground">{community.title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{community.text}</p>
-      <div className="mt-6">
-        <ActionLink href={links.community} variant="solid" className="w-full sm:w-auto">
-          <Users className="size-4" aria-hidden="true" />
-          {community.buttonLabel}
-        </ActionLink>
-      </div>
-    </div>
-  </div>
-</Section>
-
-      
-
-      
+      {/* 2. COMUNIDADE */}
+      <Section className="pt-4 sm:pt-6">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+          <div>
+            <SectionTitle
+              title="Comunidade Tech"
+              subtitle="Um espaço vivo para trocar com quem está estudando e construindo junto com você."
+            />
+            <ul className="space-y-3">
+              {communityBenefits.map((benefit) => (
+                <li key={benefit} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                  <span className="min-w-0">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-primary/40 bg-accent/40 p-7 shadow-[var(--shadow-featured)] sm:p-9">
+            <Badge className="bg-[#5865F2] text-white">
+              <DiscordIcon className="size-4 text-white" />
+              {community.badge}
+            </Badge>
+            <h3 className="mt-4 text-xl font-bold text-foreground">{community.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{community.text}</p>
+            <div className="mt-6">
+              <ActionLink
+                href={links.community}
+                variant="solid"
+                className="w-full sm:w-auto text-white"
+              >
+                <Users className="size-4" aria-hidden="true" />
+                {community.buttonLabel}
+              </ActionLink>
+            </div>
+          </div>
+        </div>
+      </Section>
 
       {/* 3. AVISOS */}
       <Section alt>
@@ -161,6 +160,8 @@ function Index() {
                 <li key={name}>
                   <a
                     href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={label}
                     className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   >
@@ -171,10 +172,7 @@ function Index() {
             })}
           </ul>
         </div>
-        <div className="mx-auto mt-6 w-full max-w-5xl border-t border-border pt-6 text-sm text-muted-foreground">
-          <p>{footer.institutional}</p>
-          <p className="mt-1">{footer.support}</p>
-        </div>
+        <div className="mx-auto mt-6 w-full max-w-5xl border-t border-border pt-6 text-sm text-muted-foreground"></div>
       </footer>
     </main>
   );
