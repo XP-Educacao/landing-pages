@@ -104,8 +104,8 @@ export const weeks: WeekBlock[] = [
       {
         id: "s1-1",
         category: "Demonstrações",
-        dateTime: "2026-08-13T18:00:00-03:00",
-        durationMinutes: 5,
+        dateTime: "2026-08-31T19:00:00-03:00",
+        durationMinutes: 90,
         title: "O que realmente é fluência em IA para os profissionais de tecnologia",
         description:
           "Entenda como a IA está mudando o mercado de tecnologia e quais habilidades serão essenciais para profissionais que desejam se destacar nos próximos anos.",
@@ -161,8 +161,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Conheça as tecnologias, tendências e movimentos que especialistas acreditam que vão impactar o mercado nos próximos anos. Um painel para entender o que vale acompanhar desde já e como se preparar para o futuro da carreira em tecnologia.",
         instructor: "Silas Liu",
-        zoomUrl: "https://us06web.zoom.us/meeting/register/a4eApOKET72b3HfP5mRHjw",
-        registrationUrl: "https://us06web.zoom.us/meeting/register/a4eApOKET72b3HfP5mRHjw",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/dXYflu0dSR2Plxj1Bj6JEA",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/dXYflu0dSR2Plxj1Bj6JEA",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -286,7 +286,7 @@ export const faq = [
   {
     question: "Como acessar o evento ao vivo?",
     answer:
-      "Todos os encontros serão realizados via Zoom. O link de acesso de cada sessão já estará disponível nesta página. Recomendamos que você copie o link e adicione-o à sua agenda para facilitar o acesso no horário do evento. Também enviaremos lembretes por e-mail antes de cada encontro.",
+      "Todos os encontros são realizados via Zoom. O link de acesso estará disponível 30 minutos antes do início de cada sessão nesta página. Copie o link e adicione à sua agenda. Também enviaremos lembretes por e-mail antes do evento.",
   },
   {
     question: "Como entrar na Comunidade?",
@@ -295,8 +295,7 @@ export const faq = [
   },
   {
     question: "Como funciona o certificado de participação?",
-    answer:
-      "O certificado é enviado por e-mail em até 5 dias úteis após o encerramento do evento, considerando a presença registrada nas sessões ao vivo.",
+    answer: "Em breve mais informações",
   },
   {
     question: "Onde encontro os materiais complementares e replays?",
