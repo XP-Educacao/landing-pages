@@ -55,7 +55,7 @@ Cada aula tem os seus próprios links, no objeto da sessão em `src/data/event.t
 É assim que a Semana 4 tem uma aula sem "Quero me Inscrever": o campo simplesmente não existe
 naquela sessão, e no lugar há um `note` explicando que a inscrição é pelo próprio Zoom.
 
-> O `zoomUrl` tem uma regra a mais: mesmo preenchido, o botão só ativa **15 minutos antes** da aula
+> O `zoomUrl` tem uma regra a mais: mesmo preenchido, o botão só ativa **30 minutos antes** da aula
 > e desativa quando ela termina. Ver *Regras de negócio*.
 
 As URLs que valem para a página inteira (Discord, redes sociais) ficam em `src/data/links.ts`.
@@ -294,7 +294,7 @@ comportamento acordado com a área acadêmica.
 
 ### Liberação do botão de aula
 
-O botão "Entrar na Aula" fica ativo a partir de **15 minutos antes** do horário de início e
+O botão "Entrar na Aula" fica ativo a partir de **30 minutos antes** do horário de início e
 permanece ativo até o fim da sessão (`início + durationMinutes`).
 
 A janela está definida em um único lugar — a constante `LIVE_WINDOW_MINUTES` em
@@ -310,8 +310,8 @@ O status é derivado da data (`getSessionStatus`), nunca digitado:
 
 | Momento | Badge | Botão "Entrar na Aula" |
 |---|---|---|
-| Antes de 15 min do início | `Em breve` (âmbar) | desabilitado |
-| De 15 min antes até o término | `Confirmado` (verde) | ativo, verde sólido — abre o Zoom |
+| Antes de 30 min do início | `Em breve` (âmbar) | desabilitado |
+| De 30 min antes até o término | `Confirmado` (verde) | ativo, verde sólido — abre o Zoom |
 | Depois do término | `Concluído` (cinza) | desabilitado |
 
 ### Botão "Adicionar ao Calendário"
