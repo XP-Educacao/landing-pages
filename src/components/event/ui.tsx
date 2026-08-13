@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
+import { smoothScrollToId } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
 
 export function Badge({
@@ -93,11 +94,35 @@ export function ActionLink({
       </span>
     );
   }
+
+  const isInPageAnchor = href.startsWith("#");
+
+  /**
+   * Links internos ("#agenda") rolam com animação em vez de saltar.
+   *
+   * Continua sendo um <a> com href de verdade: quem abre em nova aba, copia o
+   * endereço ou navega sem JavaScript mantém o comportamento normal do navegador.
+   */
+  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    // Respeita ctrl/cmd/shift+clique e botão do meio — a pessoa quer outra aba.
+    if (event.defaultPrevented) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+      return;
+    }
+
+    // Só intercepta se o destino existir. Âncora quebrada segue o padrão do
+    // navegador, em vez de virar um clique que não faz nada.
+    if (smoothScrollToId(href.slice(1))) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <a
       href={href}
       target={href.startsWith("http") ? "_blank" : undefined}
       rel={href.startsWith("http") ? "noreferrer" : undefined}
+      onClick={isInPageAnchor ? handleAnchorClick : undefined}
       className={cn(buttonStyles[variant], className)}
     >
       {children}

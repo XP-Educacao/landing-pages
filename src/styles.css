@@ -89,7 +89,7 @@
   /* #05B50F — verde da marca. Só para PREENCHIMENTO (botão, ícone), nunca texto. */
   --primary: oklch(0.67 0.225 142.8);
   /* Texto sobre --primary: 5.85:1. Branco daria 2.75:1 e reprovaria em AA. */
-  --primary-foreground: oklch(0.248 0 0);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.968 0.004 247.9);
   --secondary-foreground: oklch(0.248 0 0);
   --muted: oklch(0.968 0.004 247.9);
@@ -177,5 +177,20 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+  }
+
+  /*
+   * ⚠️  NÃO troque para `smooth`.
+   *
+   * A rolagem animada das âncoras é feita em JavaScript, em src/lib/scroll.ts.
+   * Com `smooth` aqui, TODA rolagem da página vira animação do navegador —
+   * inclusive cada passo daquela animação e as que o TanStack Router dispara na
+   * restauração de scroll. As duas competem e a página anda um trecho curto e
+   * para. O comentário no topo de scroll.ts explica em detalhe.
+   *
+   * A preferência por menos movimento é respeitada lá, no próprio scroll.ts.
+   */
+  html {
+    scroll-behavior: auto;
   }
 }
