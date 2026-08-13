@@ -5,12 +5,11 @@
  *  URLs globais (comunidade, redes) ficam em src/data/links.ts.
  *  Imagens ficam em src/data/images.ts.
  *
- *  O status de cada sessão ("Em breve" / "Confirmado" / "Concluído")
- *  é DERIVADO de dateTime — não existe campo para digitar à mão.
+ *  O badge de cada card é fixo em "Confirmado" (src/data/mappers.ts).
+ *  Já a disponibilidade dos botões é DERIVADA de dateTime + durationMinutes,
+ *  pelas regras em src/data/helpers.ts — não existe campo para digitar à mão.
  * ============================================================
  */
-
-export type SessionStatus = "confirmado" | "em-breve" | "concluido";
 
 /**
  * Convenção dos campos de URL (registrationUrl, materialsUrl, replayUrl):
@@ -47,6 +46,15 @@ export type Session = {
 /** Rótulo padrão do botão de acesso à aula. */
 export const DEFAULT_ZOOM_LABEL = "Entrar na Aula (Zoom)";
 
+/**
+ * Rótulo do mesmo botão depois que a aula termina.
+ *
+ * O link continua clicável — o que muda é só o texto, para deixar claro que a
+ * transmissão ao vivo já passou. Sobrescreve também um `zoomLabel` próprio da
+ * sessão, porque a informação "encerrada" vale mais que o rótulo customizado.
+ */
+export const ENDED_ZOOM_LABEL = "Aula encerrada";
+
 /** Títulos das seções da página. */
 export const sections = {
   notices: "Avisos Importantes sobre o evento",
@@ -77,7 +85,7 @@ export type WeekBlock = {
   /** Ex: "Semana 1" */
   label: string;
   /** Datas da semana, exibidas na aba (ex: "31/08 a 01/09"). */
-  dateRange: string;
+
   /** Tema da semana, exibido na Agenda. */
   theme: string;
   /** "stack" = cards em largura cheia · "grid" = duas colunas. */
@@ -89,21 +97,21 @@ export const weeks: WeekBlock[] = [
   {
     id: "semana-1",
     label: "Semana 1",
-    dateRange: "31/08 a 01/09",
+
     theme: "IA aplicada ao trabalho do profissional de tecnologia",
     layout: "stack",
     sessions: [
       {
         id: "s1-1",
         category: "Demonstrações",
-        dateTime: "2026-08-31T19:00:00-03:00",
-        durationMinutes: 90,
+        dateTime: "2026-08-13T18:00:00-03:00",
+        durationMinutes: 5,
         title: "O que realmente é fluência em IA para os profissionais de tecnologia",
         description:
           "Entenda como a IA está mudando o mercado de tecnologia e quais habilidades serão essenciais para profissionais que desejam se destacar nos próximos anos.",
         instructor: "Leandro César Lopes Evangelista",
-        zoomUrl: "https://zoom.us/pt/signin?ampDeviceId=06fa4e29-5075-4b13-b7f8-9153b940a425&ampSessionId=undefined&_ics=1779237884085&irclickid=~69d60QIyCxCwxzDuwxnvlcd~e945a-eka94WXMNJCrmkif~21YVL&_gl=1*e9vcdm*_gcl_au*ODQ3MTA4OTEuMTc3OTIzNzg4Mg..#/login",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/EU-1kFzLR6-uctFEGjcE2Q",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/EU-1kFzLR6-uctFEGjcE2Q",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -116,8 +124,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Acompanhe a construção de um agente de IA do zero e descubra como equipes de tecnologia desenvolvem aplicações modernas utilizando modelos de linguagem e integrações com ferramentas externas.",
         instructor: "Marcelo César",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/3A5n5rp0Ti2ITowgjgQoVg",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/3A5n5rp0Ti2ITowgjgQoVg",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -126,7 +134,7 @@ export const weeks: WeekBlock[] = [
   {
     id: "semana-2",
     label: "Semana 2",
-    dateRange: "08/09",
+
     theme: "Tendências e Mercado para 2026",
     layout: "stack",
     sessions: [
@@ -139,8 +147,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Descubra como empresas estão incorporando Inteligência Artificial para transformar produtos, criar novas experiências e acelerar a inovação. Um estudo de caso com exemplos reais, decisões estratégicas e os principais aprendizados de quem já está colocando IA no centro do negócio.",
         instructor: "Silas Liu",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/Oi3vxSaERIGJN3q9bDR2Sg",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/Oi3vxSaERIGJN3q9bDR2Sg",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -153,8 +161,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Conheça as tecnologias, tendências e movimentos que especialistas acreditam que vão impactar o mercado nos próximos anos. Um painel para entender o que vale acompanhar desde já e como se preparar para o futuro da carreira em tecnologia.",
         instructor: "Silas Liu",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/a4eApOKET72b3HfP5mRHjw",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/a4eApOKET72b3HfP5mRHjw",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -163,7 +171,7 @@ export const weeks: WeekBlock[] = [
   {
     id: "semana-3",
     label: "Semana 3",
-    dateRange: "15/09 a 22/09",
+
     theme: "Trilhas Especializadas por Pós-Graduação",
     layout: "grid",
     sessions: [
@@ -175,8 +183,8 @@ export const weeks: WeekBlock[] = [
         title: "Arquitetura de Software e Soluções",
         topic:
           "Arquiteturas AI Native: como projetar aplicações preparadas para Inteligência Artificial",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/ncahSpcoTs6kLFVsw09SwQ",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/ncahSpcoTs6kLFVsw09SwQ",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -187,8 +195,8 @@ export const weeks: WeekBlock[] = [
         durationMinutes: 90,
         title: "Engenharia e Arquitetura de Dados",
         topic: "RAG, bancos vetoriais e engenharia de dados para aplicações inteligentes",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/qDltTlr9SDqFULTGyGTMOw",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/qDltTlr9SDqFULTGyGTMOw",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -199,8 +207,8 @@ export const weeks: WeekBlock[] = [
         durationMinutes: 90,
         title: "Segurança da Informação e Cibersegurança",
         topic: "Segurança em aplicações com IA com foco em Prompt Injection, agentes e governança",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/QhalR0o_S_WK-dX_L4pECQ",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/QhalR0o_S_WK-dX_L4pECQ",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -211,8 +219,8 @@ export const weeks: WeekBlock[] = [
         durationMinutes: 90,
         title: "Data Science e Machine Learning",
         topic: "IA Generativa em produção para Ciência de Dados e aplicações inteligentes",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/GYyOtjHKS7KxE0I_Mq-I8A",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/GYyOtjHKS7KxE0I_Mq-I8A",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -221,7 +229,7 @@ export const weeks: WeekBlock[] = [
   {
     id: "semana-4",
     label: "Semana 4",
-    dateRange: "29/09",
+
     theme: "Carreira e futuro do profissional de tecnologia",
     layout: "stack",
     sessions: [
@@ -234,8 +242,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Uma conversa entre profissionais sobre como usar IA para acelerar a carreira em tecnologia: onde ela realmente destrava produtividade, o que muda na rotina dos times e quais escolhas fazem diferença nos próximos anos.",
         instructor: "André Souza",
-        // Sem registrationUrl: a inscrição desta sessão acontece pelo próprio link do Zoom.
-        zoomUrl: "",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
         zoomLabel: "Acesse a aula no Zoom",
         materialsUrl: "",
         replayUrl: "",
@@ -250,8 +258,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Encerramento aberto a perguntas: traga suas dúvidas sobre IA, estudo, mercado e carreira para responder ao vivo com os especialistas do evento.",
         instructor: "André Souza",
-        zoomUrl: "",
-        registrationUrl: "",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/i8NcLs25RJmHFm7ejhF25A",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/i8NcLs25RJmHFm7ejhF25A",
         materialsUrl: "",
         replayUrl: "",
       },
@@ -268,7 +276,7 @@ export const communityBenefits = [
 ];
 
 export const community = {
-  badge: "Discord Oficial",
+  badge: "Discord",
   title: "Comunidade XPE Community Tech",
   text: "O ponto de encontro dos estudantes e do time de professores durante todo o evento — e depois dele.",
   buttonLabel: "Entrar na Comunidade",
@@ -293,12 +301,10 @@ export const faq = [
   {
     question: "Onde encontro os materiais complementares e replays?",
     answer:
-      "Nos próprios cards de cada aula, na Agenda do Evento. Os botões “Acessar Materiais” e “Replay” são liberados em até 24 horas após cada sessão.",
+      "Nos próprios cards de cada aula, na Agenda do Evento. Os botões “Acessar Materiais” e “Replay” são liberados em até 78 horas após cada sessão.",
   },
 ];
 
 export const footer = {
-  brand: "XPE Community Tech",
-  institutional: "XP Educação | Pós Tech • XPE Community Tech 2026",
-  support: "Suporte ao Aluno: suporte@xpeducacao.com.br",
+  brand: "XP Educação Community Tech",
 };

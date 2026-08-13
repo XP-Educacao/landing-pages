@@ -1,21 +1,67 @@
 import { gerarLinkGoogleCalendar } from "@/lib/calendar";
-import type { Session, SessionStatus, WeekBlock } from "./event";
+import type { Session, WeekBlock } from "./event";
 
-/** Antecedência com que o acesso à sessão é liberado. */
-const LIVE_WINDOW_MINUTES = 15;
+/* ════════════════════════════════════════════════════════════════════════════
+ *  REGRAS DE HORÁRIO — as duas margens em torno de uma aula
+ *
+ *  Elas são independentes e resolvem coisas diferentes. Mudar uma não deve
+ *  mexer na outra, e é por isso que são duas constantes e não uma só.
+ * ════════════════════════════════════════════════════════════════════════════ */
 
-export function getSessionStatus(
+/**
+ * Antecedência com que o acesso à aula é liberado.
+ *
+ * Ex: com 30 e uma aula às 19h, o link fica clicável a partir das 18h30.
+ *
+ * ⚠️  Se este número for citado em algum texto voltado ao aluno (FAQ, avisos),
+ *     os dois precisam mudar juntos — senão a página promete uma coisa e faz
+ *     outra.
+ */
+const LIVE_WINDOW_MINUTES = 30;
+
+/**
+ * Tolerância depois do término previsto, antes de a aula ser tratada como
+ * encerrada.
+ *
+ * Existe porque aula ao vivo estoura o horário: uma aula de 19h às 20h30 pode
+ * seguir até 21h. Sem essa margem, às 20h30 em ponto o botão passaria a dizer
+ * "Aula encerrada" enquanto o professor ainda está falando — e o aluno que
+ * chegasse atrasado acharia que perdeu.
+ *
+ * Ex: com 30, uma aula que termina 20h30 só é considerada encerrada às 21h.
+ */
+const OVERTIME_TOLERANCE_MINUTES = 30;
+
+/**
+ * O acesso à aula está liberado?
+ *
+ * Abre 30 min antes do início e **não fecha**: passado esse momento, o link
+ * segue clicável indefinidamente. É de propósito — a gravação e a sala podem
+ * continuar úteis depois da aula, e um link que morre no minuto do encerramento
+ * deixa quem chegou atrasado sem nada.
+ *
+ * Governa se o botão de acesso está clicável.
+ */
+export function isSessionAccessOpen(dateTimeISO: string, now = new Date()): boolean {
+  const opensAt = new Date(dateTimeISO).getTime() - LIVE_WINDOW_MINUTES * 60 * 1000;
+  return now.getTime() >= opensAt;
+}
+
+/**
+ * A aula já terminou, considerando a tolerância de prorrogação?
+ *
+ * Só vira `true` em: início + duração + 30 min. Governa o TEXTO do botão de
+ * acesso ("Aula encerrada") e o desligamento do "Adicionar ao Calendário" —
+ * nunca o clique do acesso, que permanece liberado.
+ */
+export function hasSessionEnded(
   dateTimeISO: string,
   durationMinutes: number,
   now = new Date(),
-): SessionStatus {
-  const start = new Date(dateTimeISO);
-  const opensAt = new Date(start.getTime() - LIVE_WINDOW_MINUTES * 60 * 1000);
-  const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
-
-  if (now < opensAt) return "em-breve";
-  if (now < end) return "confirmado";
-  return "concluido";
+): boolean {
+  const endsAt =
+    new Date(dateTimeISO).getTime() + (durationMinutes + OVERTIME_TOLERANCE_MINUTES) * 60 * 1000;
+  return now.getTime() >= endsAt;
 }
 
 /**

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { weeks, type WeekBlock } from "@/data/event";
-import { getCurrentWeekIndex, getSessionStatus } from "@/data/helpers";
+import { getCurrentWeekIndex } from "@/data/helpers";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import {
   Carousel,
@@ -123,11 +123,7 @@ function WeekCarousel({ week }: { week: WeekBlock }) {
         <CarouselContent>
           {week.sessions.map((session) => (
             <CarouselItem key={session.id} className={SLIDE_WIDTH}>
-              <SessionCard
-                session={session}
-                status={getSessionStatus(session.dateTime, session.durationMinutes)}
-                variant="compact"
-              />
+              <SessionCard session={session} variant="compact" />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -172,7 +168,7 @@ export function WeeklyClasses() {
                   : "bg-tab-idle text-foreground hover:bg-border",
               )}
             >
-              {item.label} ({item.dateRange})
+              {item.label}
             </button>
           );
         })}

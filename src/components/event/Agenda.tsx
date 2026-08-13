@@ -1,5 +1,4 @@
 import { weeks } from "@/data/event";
-import { getSessionStatus } from "@/data/helpers";
 import { SessionCard } from "./SessionCard";
 
 /**
@@ -25,11 +24,7 @@ export function Agenda() {
 
           <div className={week.layout === "grid" ? "grid gap-5 sm:grid-cols-2" : "grid gap-5"}>
             {week.sessions.map((session) => (
-              <SessionCard
-                key={session.id}
-                session={session}
-                status={getSessionStatus(session.dateTime, session.durationMinutes)}
-              />
+              <SessionCard key={session.id} session={session} />
             ))}
           </div>
         </section>

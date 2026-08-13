@@ -9,9 +9,15 @@ import {
   Video,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { DEFAULT_ZOOM_LABEL, type Session, type SessionStatus } from "@/data/event";
-import { getStatusBadge } from "@/data/mappers";
-import { formatSessionDate, formatSessionTime, getSessionCalendarUrl } from "@/data/helpers";
+import { DEFAULT_ZOOM_LABEL, ENDED_ZOOM_LABEL, type Session } from "@/data/event";
+import { SESSION_BADGE } from "@/data/mappers";
+import {
+  formatSessionDate,
+  formatSessionTime,
+  getSessionCalendarUrl,
+  hasSessionEnded,
+  isSessionAccessOpen,
+} from "@/data/helpers";
 import { ActionLink, Badge } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -44,24 +50,31 @@ function SessionAction({
 
 export function SessionCard({
   session,
-  status,
   /** "compact" é o card do carrossel de Aulas da Semana: menor e com menos ações. */
   variant = "full",
 }: {
   session: Session;
-  status: SessionStatus;
   variant?: "full" | "compact";
 }) {
   const compact = variant === "compact";
 
-  // Zoom fica ativo quando há URL preenchida
-  const zoomAvailable = session.zoomUrl !== "";
+  // Duas condições para liberar o acesso, e as duas precisam valer:
+  //   1. existir link cadastrado (zoomUrl não vazio)
+  //   2. já ter passado o momento de abertura — 30 min antes do início
+  // A condição 2 não tem fim: depois de abrir, o link fica clicável para sempre.
+  const zoomAvailable = isSessionAccessOpen(session.dateTime) && session.zoomUrl !== "";
+
+  // Encerramento só conta 30 min DEPOIS do término previsto, porque aula ao vivo
+  // estoura o horário. Muda apenas o texto do botão — o clique segue liberado.
+  const ended = hasSessionEnded(session.dateTime, session.durationMinutes);
+  const zoomLabel = ended ? ENDED_ZOOM_LABEL : (session.zoomLabel ?? DEFAULT_ZOOM_LABEL);
+
   const dateText = session.dateLabel ?? formatSessionDate(session.dateTime);
   const timeText = formatSessionTime(session.dateTime, session.durationMinutes);
 
   // Aula encerrada não tem o que agendar. Fora disso, `null` significa data mal
   // cadastrada — o adaptador já registrou o motivo no console.
-  const calendarUrl = status === "concluido" ? null : getSessionCalendarUrl(session);
+  const calendarUrl = ended ? null : getSessionCalendarUrl(session);
 
   return (
     <article
@@ -92,7 +105,9 @@ export function SessionCard({
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Badge tone="green">{session.category}</Badge>
-        <Badge tone={getStatusBadge(status).tone}>{getStatusBadge(status).label}</Badge>
+        {/* Badge fixo — ver o porquê em src/data/mappers.ts. O relógio governa
+            só os botões, não esta etiqueta. */}
+        <Badge tone={SESSION_BADGE.tone}>{SESSION_BADGE.label}</Badge>
       </div>
 
       {session.topic ? (
@@ -126,7 +141,7 @@ export function SessionCard({
             disabled={!zoomAvailable}
           >
             <Video className="size-4" aria-hidden="true" />
-            {session.zoomLabel ?? DEFAULT_ZOOM_LABEL}
+            {zoomLabel}
           </ActionLink>
 
           {compact ? null : (
