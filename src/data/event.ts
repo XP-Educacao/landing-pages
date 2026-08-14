@@ -291,11 +291,11 @@ export const faq = [
   {
     question: "Como entrar na Comunidade?",
     answer:
-      "Clique em “Entrar na Comunidade” nesta página. Você será direcionado ao servidor oficial no Discord, onde acontecem as discussões, desafios e avisos do evento.",
+      "Durante o evento, você receberá as orientações para acessar a Comunidade. O link estará disponível no ambiente do evento e permitirá que você participe das discussões, acompanhe novidades e se conecte com outros alunos e especialistas.",
   },
   {
     question: "Como funciona o certificado de participação?",
-    answer: "Em breve mais informações",
+    answer: "O certificado será emitido em até 7 dias úteis após o encerramento do evento. Para ter direito à emissão, é necessário participar dos encontros e responder às pesquisas de feedback correspondentes. Após a emissão, as instruções de acesso serão enviadas por e-mail.",
   },
   {
     question: "Onde encontro os materiais complementares e replays?",
