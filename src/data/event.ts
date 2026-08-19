@@ -109,7 +109,7 @@ export const weeks: WeekBlock[] = [
         title: "O que realmente é fluência em IA para os profissionais de tecnologia",
         description:
           "Entenda como a IA está mudando o mercado de tecnologia e quais habilidades serão essenciais para profissionais que desejam se destacar nos próximos anos.",
-        instructor: "Leandro César Lopes Evangelista",
+        instructor: "Mauricio Brito",
         zoomUrl: "https://us06web.zoom.us/meeting/register/EU-1kFzLR6-uctFEGjcE2Q",
         registrationUrl: "https://us06web.zoom.us/meeting/register/EU-1kFzLR6-uctFEGjcE2Q",
         materialsUrl: "",
@@ -123,7 +123,7 @@ export const weeks: WeekBlock[] = [
         title: "Como Empresas Constroem Agentes de IA",
         description:
           "Acompanhe a construção de um agente de IA do zero e descubra como equipes de tecnologia desenvolvem aplicações modernas utilizando modelos de linguagem e integrações com ferramentas externas.",
-        instructor: "Marcelo César",
+        instructor: "Moíses Luna",
         zoomUrl: "https://us06web.zoom.us/meeting/register/3A5n5rp0Ti2ITowgjgQoVg",
         registrationUrl: "https://us06web.zoom.us/meeting/register/3A5n5rp0Ti2ITowgjgQoVg",
         materialsUrl: "",
