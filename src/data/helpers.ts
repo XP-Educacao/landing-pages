@@ -48,6 +48,21 @@ export function isSessionAccessOpen(dateTimeISO: string, now = new Date()): bool
 }
 
 /**
+ * O instante configurado já chegou?
+ *
+ * Versão sem janela de antecedência, para liberações que valem no horário
+ * exato — hoje, o botão da Comunidade. Diferente de `isSessionAccessOpen`, que
+ * abre 30 min antes por ser uma aula ao vivo: aqui não há por que antecipar.
+ *
+ * Como toda a lógica de horário do projeto, é avaliada no navegador a cada
+ * carregamento da página — o site é estático, mas a data não fica congelada
+ * no build.
+ */
+export function hasReleased(dateTimeISO: string, now = new Date()): boolean {
+  return now.getTime() >= new Date(dateTimeISO).getTime();
+}
+
+/**
  * A aula já terminou, considerando a tolerância de prorrogação?
  *
  * Só vira `true` em: início + duração + 30 min. Governa o TEXTO do botão de

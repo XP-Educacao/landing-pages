@@ -146,7 +146,7 @@ export const weeks: WeekBlock[] = [
         title: "Como empresas estão redesenhando produtos com IA",
         description:
           "Descubra como empresas estão incorporando Inteligência Artificial para transformar produtos, criar novas experiências e acelerar a inovação. Um estudo de caso com exemplos reais, decisões estratégicas e os principais aprendizados de quem já está colocando IA no centro do negócio.",
-        instructor: "Silas Liu",
+        instructor: "",
         zoomUrl: "https://us06web.zoom.us/meeting/register/Oi3vxSaERIGJN3q9bDR2Sg",
         registrationUrl: "https://us06web.zoom.us/meeting/register/Oi3vxSaERIGJN3q9bDR2Sg",
         materialsUrl: "",
@@ -160,7 +160,7 @@ export const weeks: WeekBlock[] = [
         title: "As tecnologias que todo profissional de tecnologia deveria acompanhar",
         description:
           "Conheça as tecnologias, tendências e movimentos que especialistas acreditam que vão impactar o mercado nos próximos anos. Um painel para entender o que vale acompanhar desde já e como se preparar para o futuro da carreira em tecnologia.",
-        instructor: "Silas Liu",
+        instructor: "",
         zoomUrl: "https://us06web.zoom.us/meeting/register/dXYflu0dSR2Plxj1Bj6JEA",
         registrationUrl: "https://us06web.zoom.us/meeting/register/dXYflu0dSR2Plxj1Bj6JEA",
         materialsUrl: "",
@@ -241,7 +241,7 @@ export const weeks: WeekBlock[] = [
         title: "Como acelerar sua carreira em tecnologia utilizando IA",
         description:
           "Uma conversa entre profissionais sobre como usar IA para acelerar a carreira em tecnologia: onde ela realmente destrava produtividade, o que muda na rotina dos times e quais escolhas fazem diferença nos próximos anos.",
-        instructor: "André Souza",
+        instructor: "",
         registrationUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
         zoomUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
         zoomLabel: "Acesse a aula no Zoom",
@@ -257,7 +257,7 @@ export const weeks: WeekBlock[] = [
         title: "Especialistas respondem sobre IA, carreira e tendência",
         description:
           "Encerramento aberto a perguntas: traga suas dúvidas sobre IA, estudo, mercado e carreira para responder ao vivo com os especialistas do evento.",
-        instructor: "André Souza",
+        instructor: "",
         zoomUrl: "https://us06web.zoom.us/meeting/register/i8NcLs25RJmHFm7ejhF25A",
         registrationUrl: "https://us06web.zoom.us/meeting/register/i8NcLs25RJmHFm7ejhF25A",
         materialsUrl: "",
@@ -280,6 +280,19 @@ export const community = {
   title: "Comunidade XPE Community Tech",
   text: "O ponto de encontro dos estudantes e do time de professores durante todo o evento — e depois dele.",
   buttonLabel: "Entrar na Comunidade",
+  /* ══════════════════════════════════════════════════════════════════════
+   *  📅 LIBERAÇÃO DO BOTÃO DA COMUNIDADE — ajuste aqui
+   *
+   *  Antes deste instante o botão fica desabilitado e exibe `pendingLabel`.
+   *  A partir dele, volta ao verde e ao texto de `buttonLabel`.
+   *
+   *  Mesmo formato das aulas: ISO 8601 com o fuso -03:00 explícito. Sem o
+   *  fuso, a hora seria lida no relógio de quem abre a página, e a liberação
+   *  aconteceria em momentos diferentes para cada visitante.
+   * ══════════════════════════════════════════════════════════════════════ */
+  releaseDateTime: "2026-08-31T19:00:00-03:00",
+  /** Texto enquanto a liberação não chega. */
+  pendingLabel: "Em breve",
 };
 
 export const faq = [
@@ -295,7 +308,8 @@ export const faq = [
   },
   {
     question: "Como funciona o certificado de participação?",
-    answer: "O certificado será emitido em até 7 dias úteis após o encerramento do evento. Para ter direito à emissão, é necessário participar dos encontros e responder às pesquisas de feedback correspondentes. Após a emissão, as instruções de acesso serão enviadas por e-mail.",
+    answer:
+      "O certificado será emitido em até 7 dias úteis após o encerramento do evento. Para ter direito à emissão, é necessário participar dos encontros e responder às pesquisas de feedback correspondentes. Após a emissão, as instruções de acesso serão enviadas por e-mail.",
   },
   {
     question: "Onde encontro os materiais complementares e replays?",

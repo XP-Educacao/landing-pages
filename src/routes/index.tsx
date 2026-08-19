@@ -11,6 +11,7 @@ import {
 import { community, communityBenefits, faq, footer, hero, notices, sections } from "@/data/event";
 import { images } from "@/data/images";
 import { AGENDA_ANCHOR, links } from "@/data/links";
+import { hasReleased } from "@/data/helpers";
 import { ActionLink, Badge, Section, SectionTitle } from "@/components/event/ui";
 import { Agenda } from "@/components/event/Agenda";
 import { Banner } from "@/components/event/Banner";
@@ -37,6 +38,10 @@ function DiscordIcon({ className }: { className?: string }) {
 }
 
 function Index() {
+  // Liberação da Comunidade: a data fica em `community.releaseDateTime`
+  // (src/data/event.ts). Avaliada a cada carregamento, no relógio do visitante.
+  const communityReleased = hasReleased(community.releaseDateTime);
+
   return (
     <main className="min-h-screen bg-background">
       {/* 0. BANNER */}
@@ -93,13 +98,17 @@ function Index() {
             <h3 className="mt-4 text-xl font-bold text-foreground">{community.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{community.text}</p>
             <div className="mt-6">
+              {/* Mesmo padrão dos cards de aula: um só ActionLink, com a variante
+                  e o texto escolhidos pelo horário. `disabled` já renderiza o
+                  elemento como não clicável e com a cor apagada. */}
               <ActionLink
-                href={links.community}
-                variant="solid"
-                className="w-full sm:w-auto text-white"
+                href={communityReleased ? links.community : "#"}
+                variant={communityReleased ? "solid" : "disabled"}
+                disabled={!communityReleased}
+                className="w-full sm:w-auto"
               >
                 <Users className="size-4" aria-hidden="true" />
-                {community.buttonLabel}
+                {communityReleased ? community.buttonLabel : community.pendingLabel}
               </ActionLink>
             </div>
           </div>
