@@ -113,7 +113,7 @@ export const weeks: WeekBlock[] = [
         zoomUrl: "https://us06web.zoom.us/meeting/register/EU-1kFzLR6-uctFEGjcE2Q",
         registrationUrl: "https://us06web.zoom.us/meeting/register/EU-1kFzLR6-uctFEGjcE2Q",
         materialsUrl: "https://ava.xpeducacao.com.br/d2l/le/enhancedSequenceViewer/7826?url=https%3A%2F%2F31b3293b-2f2a-4c20-ae81-70694e5d5ddc.sequences.api.brightspace.com%2F7826%2Factivity%2F88650%3FfilterOnDatesAndDepth%3D1",
-        replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-31-09.html",
+        replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-31-08.html",
       },
       {
         id: "s1-2",
