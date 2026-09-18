@@ -186,7 +186,7 @@ export const weeks: WeekBlock[] = [
         zoomUrl: "https://us06web.zoom.us/meeting/register/ncahSpcoTs6kLFVsw09SwQ",
         registrationUrl: "https://us06web.zoom.us/meeting/register/ncahSpcoTs6kLFVsw09SwQ",
         materialsUrl: "",
-        replayUrl: "",
+        replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-15-09-arquitetura%20-software-solu%c3%a7%c3%b5es.html",
       },
       {
         id: "s3-2",
@@ -198,7 +198,7 @@ export const weeks: WeekBlock[] = [
         zoomUrl: "https://us06web.zoom.us/meeting/register/qDltTlr9SDqFULTGyGTMOw",
         registrationUrl: "https://us06web.zoom.us/meeting/register/qDltTlr9SDqFULTGyGTMOw",
         materialsUrl: "",
-        replayUrl: "",
+        replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-15-09-engenharia-arquitetura-dados.html",
       },
       {
         id: "s3-3",
