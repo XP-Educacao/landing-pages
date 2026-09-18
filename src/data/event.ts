@@ -163,7 +163,6 @@ export const weeks: WeekBlock[] = [
         instructor: "",
         zoomUrl: "https://us06web.zoom.us/meeting/register/dXYflu0dSR2Plxj1Bj6JEA",
         registrationUrl: "https://us06web.zoom.us/meeting/register/dXYflu0dSR2Plxj1Bj6JEA",
-        materialsUrl: "",
         replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-08-09-tec-prof-tic.html",
       },
     ],
@@ -185,7 +184,7 @@ export const weeks: WeekBlock[] = [
           "Arquiteturas AI Native: como projetar aplicações preparadas para Inteligência Artificial",
         zoomUrl: "https://us06web.zoom.us/meeting/register/ncahSpcoTs6kLFVsw09SwQ",
         registrationUrl: "https://us06web.zoom.us/meeting/register/ncahSpcoTs6kLFVsw09SwQ",
-        materialsUrl: "",
+        materialsUrl: "https://ava.xpeducacao.com.br/d2l/le/enhancedSequenceViewer/7826?url=https%3A%2F%2F31b3293b-2f2a-4c20-ae81-70694e5d5ddc.sequences.api.brightspace.com%2F7826%2Factivity%2F91714%3FfilterOnDatesAndDepth%3D1",
         replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-15-09-arquitetura%20-software-solu%c3%a7%c3%b5es.html",
       },
       {
@@ -197,7 +196,7 @@ export const weeks: WeekBlock[] = [
         topic: "RAG, bancos vetoriais e engenharia de dados para aplicações inteligentes",
         zoomUrl: "https://us06web.zoom.us/meeting/register/qDltTlr9SDqFULTGyGTMOw",
         registrationUrl: "https://us06web.zoom.us/meeting/register/qDltTlr9SDqFULTGyGTMOw",
-        materialsUrl: "",
+        materialsUrl: "https://ava.xpeducacao.com.br/d2l/le/enhancedSequenceViewer/7826?url=https%3A%2F%2F31b3293b-2f2a-4c20-ae81-70694e5d5ddc.sequences.api.brightspace.com%2F7826%2Factivity%2F91716%3FfilterOnDatesAndDepth%3D1",
         replayUrl: "https://ava.xpeducacao.com.br/content/enforced/7826-XPE-COM-Tech26/replay-15-09-engenharia-arquitetura-dados.html",
       },
       {
