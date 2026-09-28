@@ -239,7 +239,7 @@ export const weeks: WeekBlock[] = [
         durationMinutes: 90,
         title: "Como acelerar sua carreira em tecnologia utilizando IA",
         description:
-          "Uma conversa entre profissionais sobre como usar IA para acelerar a carreira em tecnologia: onde ela realmente destrava produtividade, o que muda na rotina dos times e quais escolhas fazem diferença nos próximos anos.",
+          "Uma conversa entre profissionais sobre como usar IA para acelerar a carreira em tecnologia: onde ela realmente destrava produtividade, o que muda na rotina dos times e quais escolhas fazem diferença nos próximos anos. Encerramento aberto a perguntas: traga suas dúvidas sobre IA, estudo, mercado e carreira para responder ao vivo com os especialistas do evento.",
         instructor: "",
         registrationUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
         zoomUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
@@ -247,21 +247,7 @@ export const weeks: WeekBlock[] = [
         materialsUrl: "",
         replayUrl: "",
         note: "*Para garantir sua participação se inscreva no link do Zoom.",
-      },
-      {
-        id: "s4-2",
-        category: "Asking Me Anything",
-        dateTime: "2026-09-29T19:00:00-03:00",
-        durationMinutes: 90,
-        title: "Especialistas respondem sobre IA, carreira e tendência",
-        description:
-          "Encerramento aberto a perguntas: traga suas dúvidas sobre IA, estudo, mercado e carreira para responder ao vivo com os especialistas do evento.",
-        instructor: "",
-        zoomUrl: "https://us06web.zoom.us/meeting/register/i8NcLs25RJmHFm7ejhF25A",
-        registrationUrl: "https://us06web.zoom.us/meeting/register/i8NcLs25RJmHFm7ejhF25A",
-        materialsUrl: "",
-        replayUrl: "",
-      },
+      }
     ],
   },
 ];
