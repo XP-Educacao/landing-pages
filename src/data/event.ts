@@ -235,14 +235,14 @@ export const weeks: WeekBlock[] = [
       {
         id: "s4-1",
         category: "Mesa redonda",
-        dateTime: "2026-09-29T19:00:00-03:00",
+        dateTime: "2026-10-06T19:00:00-03:00",
         durationMinutes: 90,
         title: "Como acelerar sua carreira em tecnologia utilizando IA",
         description:
           "Uma conversa entre profissionais sobre como usar IA para acelerar a carreira em tecnologia: onde ela realmente destrava produtividade, o que muda na rotina dos times e quais escolhas fazem diferença nos próximos anos. Encerramento aberto a perguntas: traga suas dúvidas sobre IA, estudo, mercado e carreira para responder ao vivo com os especialistas do evento.",
         instructor: "",
-        registrationUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
-        zoomUrl: "https://us06web.zoom.us/meeting/register/3qloS4-dTw-6l15JU8A1KQ",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/1LDG59koTfawETWO6daITA",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/1LDG59koTfawETWO6daITA ",
         zoomLabel: "Acesse a aula no Zoom",
         materialsUrl: "",
         replayUrl: "",
