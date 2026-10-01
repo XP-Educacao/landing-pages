@@ -241,8 +241,8 @@ export const weeks: WeekBlock[] = [
         description:
           "Uma conversa entre profissionais sobre como usar IA para acelerar a carreira em tecnologia: onde ela realmente destrava produtividade, o que muda na rotina dos times e quais escolhas fazem diferença nos próximos anos. Encerramento aberto a perguntas: traga suas dúvidas sobre IA, estudo, mercado e carreira para responder ao vivo com os especialistas do evento.",
         instructor: "",
-        registrationUrl: "https://us06web.zoom.us/meeting/register/1LDG59koTfawETWO6daITA",
-        zoomUrl: "https://us06web.zoom.us/meeting/register/1LDG59koTfawETWO6daITA ",
+        registrationUrl: "https://us06web.zoom.us/meeting/register/gLCYOH7aSHyMUJACvQ0_wQ#/registration",
+        zoomUrl: "https://us06web.zoom.us/meeting/register/gLCYOH7aSHyMUJACvQ0_wQ#/registration",
         zoomLabel: "Acesse a aula no Zoom",
         materialsUrl: "",
         replayUrl: "",
